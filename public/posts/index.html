@@ -142,13 +142,13 @@
 早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。
 安装教程参考：
 官方wiki
+Macbook 10,x安装教程
 中文安装指南
-↑ 完成基本安装
-安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：
-在macOS分区时候要选择partition
-Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
-引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上–remove参数，可以实现开机时按住&#34;Alt&#34;键切换成macOS引导。
-完成基础安装后，就是折腾各种驱动、软件、环境的配置了。</p>
+安装过程 禁用服务，修改软件源 systemctl stop reflector.service iwctl timedatectl set-ntp true vim /etc/pacman.d/mirrorlist # Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch # optional pacman -Sy openssh fbset fbset -xres 2304 -yres 1440 systemctl start sshd 分区 第一次安装使用btrfs分区，但是nvme休眠后无法恢复状态。如果遇到SSD在休眠之后无法恢复，可以参考下文试试修改内核启动参数：
+[Solved] System gets borked after suspending
+Controller_failure_due_to_broken_suspend_support
+我尝试以上方法后仍然不行，所以第二次重装使用传统的ext4分区。
+cfdisk /dev/nvme0n1 mkfs.ext4 /dev/nvme0n1p4 mkswap /dev/nvm0n1p3 mount --mkdir /dev/nvme0n1p1 /mnt/boot swapon /dev/nvme0n1p3 安装系统 pacstrap /mnt base base-devel linux linux-firmware pacstrap /mnt networkmanager vim sudo zsh zsh-completions genfstab -U /mnt &gt;&gt; /mnt/etc/fstab 配置系统 arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime hwclock --systohc vim /etc/hostname vim /etc/hosts vim /etc/locale....</p>
   </div>
   <footer class="entry-footer"><span title='2023-10-10 20:06:11 +0800 CST'>October 10, 2023</span></footer>
   <a class="entry-link" aria-label="post link to 苹果Macbook 12寸安装Archlinux折腾记录" href="https://leifjacky.github.io/posts/archlinux/arch-linux-installation-on-12-inch-macbook-2017/"></a>

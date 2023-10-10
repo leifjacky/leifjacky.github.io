@@ -12,13 +12,13 @@
 早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。
 安装教程参考：
 官方wiki
+Macbook 10,x安装教程
 中文安装指南
-↑ 完成基本安装
-安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：
-在macOS分区时候要选择partition
-Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
-引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上&ndash;remove参数，可以实现开机时按住&quot;Alt&quot;键切换成macOS引导。
-完成基础安装后，就是折腾各种驱动、软件、环境的配置了。">
+安装过程 禁用服务，修改软件源 systemctl stop reflector.service iwctl timedatectl set-ntp true vim /etc/pacman.d/mirrorlist # Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch # optional pacman -Sy openssh fbset fbset -xres 2304 -yres 1440 systemctl start sshd 分区 第一次安装使用btrfs分区，但是nvme休眠后无法恢复状态。如果遇到SSD在休眠之后无法恢复，可以参考下文试试修改内核启动参数：
+[Solved] System gets borked after suspending
+Controller_failure_due_to_broken_suspend_support
+我尝试以上方法后仍然不行，所以第二次重装使用传统的ext4分区。
+cfdisk /dev/nvme0n1 mkfs.ext4 /dev/nvme0n1p4 mkswap /dev/nvm0n1p3 mount --mkdir /dev/nvme0n1p1 /mnt/boot swapon /dev/nvme0n1p3 安装系统 pacstrap /mnt base base-devel linux linux-firmware pacstrap /mnt networkmanager vim sudo zsh zsh-completions genfstab -U /mnt &gt;&gt; /mnt/etc/fstab 配置系统 arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime hwclock --systohc vim /etc/hostname vim /etc/hosts vim /etc/locale.">
 <meta name="author" content="">
 <link rel="canonical" href="https://leifjacky.github.io/posts/archlinux/arch-linux-installation-on-12-inch-macbook-2017/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.5cfc680b1eeaeef9efbced92d46c2a9e876b72ee14fba85846afc4cff9e6e6f8.css" integrity="sha256-XPxoCx7q7vnvvO2S1Gwqnodrcu4U&#43;6hYRq/Ez/nm5vg=" rel="preload stylesheet" as="style">
@@ -73,13 +73,13 @@ Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
 早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。
 安装教程参考：
 官方wiki
+Macbook 10,x安装教程
 中文安装指南
-↑ 完成基本安装
-安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：
-在macOS分区时候要选择partition
-Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
-引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上&ndash;remove参数，可以实现开机时按住&quot;Alt&quot;键切换成macOS引导。
-完成基础安装后，就是折腾各种驱动、软件、环境的配置了。" />
+安装过程 禁用服务，修改软件源 systemctl stop reflector.service iwctl timedatectl set-ntp true vim /etc/pacman.d/mirrorlist # Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch # optional pacman -Sy openssh fbset fbset -xres 2304 -yres 1440 systemctl start sshd 分区 第一次安装使用btrfs分区，但是nvme休眠后无法恢复状态。如果遇到SSD在休眠之后无法恢复，可以参考下文试试修改内核启动参数：
+[Solved] System gets borked after suspending
+Controller_failure_due_to_broken_suspend_support
+我尝试以上方法后仍然不行，所以第二次重装使用传统的ext4分区。
+cfdisk /dev/nvme0n1 mkfs.ext4 /dev/nvme0n1p4 mkswap /dev/nvm0n1p3 mount --mkdir /dev/nvme0n1p1 /mnt/boot swapon /dev/nvme0n1p3 安装系统 pacstrap /mnt base base-devel linux linux-firmware pacstrap /mnt networkmanager vim sudo zsh zsh-completions genfstab -U /mnt &gt;&gt; /mnt/etc/fstab 配置系统 arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime hwclock --systohc vim /etc/hostname vim /etc/hosts vim /etc/locale." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://leifjacky.github.io/posts/archlinux/arch-linux-installation-on-12-inch-macbook-2017/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-10-10T20:06:11+08:00" />
@@ -92,13 +92,13 @@ Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
 早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。
 安装教程参考：
 官方wiki
+Macbook 10,x安装教程
 中文安装指南
-↑ 完成基本安装
-安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：
-在macOS分区时候要选择partition
-Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
-引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上&ndash;remove参数，可以实现开机时按住&quot;Alt&quot;键切换成macOS引导。
-完成基础安装后，就是折腾各种驱动、软件、环境的配置了。"/>
+安装过程 禁用服务，修改软件源 systemctl stop reflector.service iwctl timedatectl set-ntp true vim /etc/pacman.d/mirrorlist # Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch # optional pacman -Sy openssh fbset fbset -xres 2304 -yres 1440 systemctl start sshd 分区 第一次安装使用btrfs分区，但是nvme休眠后无法恢复状态。如果遇到SSD在休眠之后无法恢复，可以参考下文试试修改内核启动参数：
+[Solved] System gets borked after suspending
+Controller_failure_due_to_broken_suspend_support
+我尝试以上方法后仍然不行，所以第二次重装使用传统的ext4分区。
+cfdisk /dev/nvme0n1 mkfs.ext4 /dev/nvme0n1p4 mkswap /dev/nvm0n1p3 mount --mkdir /dev/nvme0n1p1 /mnt/boot swapon /dev/nvme0n1p3 安装系统 pacstrap /mnt base base-devel linux linux-firmware pacstrap /mnt networkmanager vim sudo zsh zsh-completions genfstab -U /mnt &gt;&gt; /mnt/etc/fstab 配置系统 arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime hwclock --systohc vim /etc/hostname vim /etc/hosts vim /etc/locale."/>
 
 
 <script type="application/ld+json">
@@ -127,12 +127,12 @@ Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
   "@type": "BlogPosting",
   "headline": "苹果Macbook 12寸安装Archlinux折腾记录",
   "name": "苹果Macbook 12寸安装Archlinux折腾记录",
-  "description": "最近1年把工作和日常的主力机都换成了Archlinux，特别喜欢Linux下的平铺式窗口管理器。而在macOS下尝试过使用yabai配合skhd，相比之下还是觉得不够完善。\n再加上手上两台Macbook笔记本已经步入晚年（一台Macbook Pro 2015 Early，一台Macbook 12寸 2017），操作上已经不再爽快，从而产生在Macbook上安装Archlinux的想法，实现所有设备操作模式的大一统😈️。\n早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。\n安装教程参考：\n官方wiki\n中文安装指南\n↑ 完成基本安装\n安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：\n在macOS分区时候要选择partition\nArchlinux安装过程中，注意原来苹果的EFI分区不要删掉。\n引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上\u0026ndash;remove参数，可以实现开机时按住\u0026quot;Alt\u0026quot;键切换成macOS引导。\n完成基础安装后，就是折腾各种驱动、软件、环境的配置了。",
+  "description": "最近1年把工作和日常的主力机都换成了Archlinux，特别喜欢Linux下的平铺式窗口管理器。而在macOS下尝试过使用yabai配合skhd，相比之下还是觉得不够完善。\n再加上手上两台Macbook笔记本已经步入晚年（一台Macbook Pro 2015 Early，一台Macbook 12寸 2017），操作上已经不再爽快，从而产生在Macbook上安装Archlinux的想法，实现所有设备操作模式的大一统😈️。\n早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。\n安装教程参考：\n官方wiki\nMacbook 10,x安装教程\n中文安装指南\n安装过程 禁用服务，修改软件源 systemctl stop reflector.service iwctl timedatectl set-ntp true vim /etc/pacman.d/mirrorlist # Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch # optional pacman -Sy openssh fbset fbset -xres 2304 -yres 1440 systemctl start sshd 分区 第一次安装使用btrfs分区，但是nvme休眠后无法恢复状态。如果遇到SSD在休眠之后无法恢复，可以参考下文试试修改内核启动参数：\n[Solved] System gets borked after suspending\nController_failure_due_to_broken_suspend_support\n我尝试以上方法后仍然不行，所以第二次重装使用传统的ext4分区。\ncfdisk /dev/nvme0n1 mkfs.ext4 /dev/nvme0n1p4 mkswap /dev/nvm0n1p3 mount --mkdir /dev/nvme0n1p1 /mnt/boot swapon /dev/nvme0n1p3 安装系统 pacstrap /mnt base base-devel linux linux-firmware pacstrap /mnt networkmanager vim sudo zsh zsh-completions genfstab -U /mnt \u0026gt;\u0026gt; /mnt/etc/fstab 配置系统 arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime hwclock --systohc vim /etc/hostname vim /etc/hosts vim /etc/locale.",
   "keywords": [
     "archlinux", "linux"
   ],
-  "articleBody": "最近1年把工作和日常的主力机都换成了Archlinux，特别喜欢Linux下的平铺式窗口管理器。而在macOS下尝试过使用yabai配合skhd，相比之下还是觉得不够完善。\n再加上手上两台Macbook笔记本已经步入晚年（一台Macbook Pro 2015 Early，一台Macbook 12寸 2017），操作上已经不再爽快，从而产生在Macbook上安装Archlinux的想法，实现所有设备操作模式的大一统😈️。\n早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。\n安装教程参考：\n官方wiki\n中文安装指南\n↑ 完成基本安装\n安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：\n在macOS分区时候要选择partition\nArchlinux安装过程中，注意原来苹果的EFI分区不要删掉。\n引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上–remove参数，可以实现开机时按住\"Alt\"键切换成macOS引导。\n完成基础安装后，就是折腾各种驱动、软件、环境的配置了。\n",
-  "wordCount" : "19",
+  "articleBody": "最近1年把工作和日常的主力机都换成了Archlinux，特别喜欢Linux下的平铺式窗口管理器。而在macOS下尝试过使用yabai配合skhd，相比之下还是觉得不够完善。\n再加上手上两台Macbook笔记本已经步入晚年（一台Macbook Pro 2015 Early，一台Macbook 12寸 2017），操作上已经不再爽快，从而产生在Macbook上安装Archlinux的想法，实现所有设备操作模式的大一统😈️。\n早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。\n安装教程参考：\n官方wiki\nMacbook 10,x安装教程\n中文安装指南\n安装过程 禁用服务，修改软件源 systemctl stop reflector.service iwctl timedatectl set-ntp true vim /etc/pacman.d/mirrorlist # Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch # optional pacman -Sy openssh fbset fbset -xres 2304 -yres 1440 systemctl start sshd 分区 第一次安装使用btrfs分区，但是nvme休眠后无法恢复状态。如果遇到SSD在休眠之后无法恢复，可以参考下文试试修改内核启动参数：\n[Solved] System gets borked after suspending\nController_failure_due_to_broken_suspend_support\n我尝试以上方法后仍然不行，所以第二次重装使用传统的ext4分区。\ncfdisk /dev/nvme0n1 mkfs.ext4 /dev/nvme0n1p4 mkswap /dev/nvm0n1p3 mount --mkdir /dev/nvme0n1p1 /mnt/boot swapon /dev/nvme0n1p3 安装系统 pacstrap /mnt base base-devel linux linux-firmware pacstrap /mnt networkmanager vim sudo zsh zsh-completions genfstab -U /mnt \u003e\u003e /mnt/etc/fstab 配置系统 arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime hwclock --systohc vim /etc/hostname vim /etc/hosts vim /etc/locale.gen locale-gen echo 'LANG=en_US.UTF-8' \u003e /etc/locale.conf passwd pacman -S intel-ucode # Intel pacman -S grub efibootmgr grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ARCH --removable vim /etc/default/grub grub-mkconfig -o /boot/grub/grub.cfg exit umount -R /mnt reboot 完成基本安装 安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：\n在macOS分区时候要选择partition\nArchlinux安装过程中，注意原来苹果的EFI分区不要删掉。\n引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上–remove参数，可以实现开机时按住\"Alt\"键切换成macOS引导。\n完成基础安装后，就是折腾各种驱动、软件、环境的配置了。\n常见问题与解决方法 设置HiDPI\n从休眠状态恢复时，网络会断开，切NetworkManager卡死，无法重新连接网络。这是因为每次启动NetworkManager都会重新随机生成MAC地址。\nConfiguring_MAC_address_randomization\n[SOLVED] MAC randomization, NM, IWD ?\n",
+  "wordCount" : "145",
   "inLanguage": "en",
   "datePublished": "2023-10-10T20:06:11+08:00",
   "dateModified": "2023-10-10T20:06:11+08:00",
@@ -217,14 +217,71 @@ Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
 <p><a href="https://wiki.archlinux.org/title/Mac">官方wiki</a></p>
 </li>
 <li>
+<p><a href="https://wiki.archlinux.org/title/MacBookPro10,x">Macbook 10,x安装教程</a></p>
+</li>
+<li>
 <p><a href="https://arch.icekylin.online/guide/rookie/basic-install.html">中文安装指南</a></p>
 </li>
 </ul>
 <br />
+<h2 id="安装过程">安装过程<a hidden class="anchor" aria-hidden="true" href="#安装过程">#</a></h2>
+<h3 id="禁用服务修改软件源">禁用服务，修改软件源<a hidden class="anchor" aria-hidden="true" href="#禁用服务修改软件源">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>systemctl stop reflector.service
+</span></span><span style="display:flex;"><span>iwctl
+</span></span><span style="display:flex;"><span>timedatectl set-ntp true
+</span></span><span style="display:flex;"><span>vim /etc/pacman.d/mirrorlist
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># optional</span>
+</span></span><span style="display:flex;"><span>pacman -Sy openssh fbset
+</span></span><span style="display:flex;"><span>fbset -xres <span style="color:#ae81ff">2304</span> -yres <span style="color:#ae81ff">1440</span>
+</span></span><span style="display:flex;"><span>systemctl start sshd
+</span></span></code></pre></div><br />
+<h3 id="分区">分区<a hidden class="anchor" aria-hidden="true" href="#分区">#</a></h3>
+<p>第一次安装使用btrfs分区，但是nvme休眠后无法恢复状态。如果遇到SSD在休眠之后无法恢复，可以参考下文试试修改内核启动参数：</p>
+<p><a href="https://bbs.archlinux.org/viewtopic.php?id=278820">[Solved] System gets borked after suspending</a></p>
+<p><a href="https://wiki.archlinux.org/title/Solid_state_drive/NVMe#Controller_failure_due_to_broken_suspend_support">Controller_failure_due_to_broken_suspend_support</a></p>
+<p>我尝试以上方法后仍然不行，所以第二次重装使用传统的ext4分区。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>cfdisk /dev/nvme0n1
+</span></span><span style="display:flex;"><span>mkfs.ext4 /dev/nvme0n1p4
+</span></span><span style="display:flex;"><span>mkswap /dev/nvm0n1p3
+</span></span><span style="display:flex;"><span>mount --mkdir /dev/nvme0n1p1 /mnt/boot
+</span></span><span style="display:flex;"><span>swapon /dev/nvme0n1p3
+</span></span></code></pre></div><p><img loading="lazy" src="img/photo_2023-10-11_00-56-56.png" alt=""  />
+</p>
+<br />
+<h3 id="安装系统">安装系统<a hidden class="anchor" aria-hidden="true" href="#安装系统">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacstrap /mnt base base-devel linux linux-firmware
+</span></span><span style="display:flex;"><span>pacstrap /mnt networkmanager vim sudo zsh zsh-completions
+</span></span><span style="display:flex;"><span>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab
+</span></span></code></pre></div><p><img loading="lazy" src="img/photo_2023-10-11_01-02-37.png" alt=""  />
+</p>
+<br />
+<h3 id="配置系统">配置系统<a hidden class="anchor" aria-hidden="true" href="#配置系统">#</a></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>arch-chroot /mnt
+</span></span><span style="display:flex;"><span>ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
+</span></span><span style="display:flex;"><span>hwclock --systohc
+</span></span><span style="display:flex;"><span>vim /etc/hostname
+</span></span><span style="display:flex;"><span>vim /etc/hosts
+</span></span><span style="display:flex;"><span>vim /etc/locale.gen
+</span></span><span style="display:flex;"><span>locale-gen
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;LANG=en_US.UTF-8&#39;</span>  &gt; /etc/locale.conf
+</span></span><span style="display:flex;"><span>passwd
+</span></span><span style="display:flex;"><span>pacman -S intel-ucode <span style="color:#75715e"># Intel</span>
+</span></span><span style="display:flex;"><span>pacman -S grub efibootmgr
+</span></span><span style="display:flex;"><span>grub-install --target<span style="color:#f92672">=</span>x86_64-efi --efi-directory<span style="color:#f92672">=</span>/boot --bootloader-id<span style="color:#f92672">=</span>ARCH --removable
+</span></span><span style="display:flex;"><span>vim /etc/default/grub
+</span></span><span style="display:flex;"><span>grub-mkconfig -o /boot/grub/grub.cfg
+</span></span></code></pre></div><p><img loading="lazy" src="img/photo_2023-10-11_01-12-24.png" alt=""  />
+</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>exit
+</span></span><span style="display:flex;"><span>umount -R /mnt
+</span></span><span style="display:flex;"><span>reboot
+</span></span></code></pre></div><br/>
+<h3 id="完成基本安装">完成基本安装<a hidden class="anchor" aria-hidden="true" href="#完成基本安装">#</a></h3>
 <p><img loading="lazy" src="img/photo_2023-10-10_20-21-02.jpg" alt=""  />
 
-↑ 完成基本安装</p>
-<br />
+<br /></p>
 <p>安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：</p>
 <ol>
 <li>
@@ -240,6 +297,12 @@ Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
 <p>完成基础安装后，就是折腾各种驱动、软件、环境的配置了。</p>
 </li>
 </ol>
+<hr>
+<h2 id="常见问题与解决方法">常见问题与解决方法<a hidden class="anchor" aria-hidden="true" href="#常见问题与解决方法">#</a></h2>
+<p>设置<a href="https://wiki.archlinux.org/title/HiDPI">HiDPI</a></p>
+<p>从休眠状态恢复时，网络会断开，切NetworkManager卡死，无法重新连接网络。这是因为每次启动NetworkManager都会重新随机生成MAC地址。</p>
+<p><a href="https://wiki.archlinux.org/title/NetworkManager#Configuring_MAC_address_randomization">Configuring_MAC_address_randomization</a></p>
+<p><a href="https://bbs.archlinux.org/viewtopic.php?id=280657">[SOLVED] MAC randomization, NM, IWD ?</a></p>
 
 
   </div>
