@@ -2,28 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://leifjacky.github.io/tags/archlinux/</loc>
-    <lastmod>2023-10-10T20:06:11+08:00</lastmod>
-  </url><url>
-    <loc>https://leifjacky.github.io/tags/linux/</loc>
-    <lastmod>2023-10-10T20:06:11+08:00</lastmod>
-  </url><url>
-    <loc>https://leifjacky.github.io/</loc>
-    <lastmod>2023-10-10T20:06:11+08:00</lastmod>
-  </url><url>
-    <loc>https://leifjacky.github.io/posts/</loc>
-    <lastmod>2023-10-10T20:06:11+08:00</lastmod>
-  </url><url>
-    <loc>https://leifjacky.github.io/tags/</loc>
-    <lastmod>2023-10-10T20:06:11+08:00</lastmod>
-  </url><url>
-    <loc>https://leifjacky.github.io/posts/archlinux/arch-linux-installation-on-12-inch-macbook-2017/</loc>
-    <lastmod>2023-10-10T20:06:11+08:00</lastmod>
-  </url><url>
     <loc>https://leifjacky.github.io/posts/archlinux/arch-linux-fcitx5-shuangpin-not-available/</loc>
     <lastmod>2023-10-10T19:21:26+08:00</lastmod>
   </url><url>
+    <loc>https://leifjacky.github.io/tags/archlinux/</loc>
+    <lastmod>2023-10-10T19:21:26+08:00</lastmod>
+  </url><url>
     <loc>https://leifjacky.github.io/tags/fcitx/</loc>
+    <lastmod>2023-10-10T19:21:26+08:00</lastmod>
+  </url><url>
+    <loc>https://leifjacky.github.io/tags/linux/</loc>
+    <lastmod>2023-10-10T19:21:26+08:00</lastmod>
+  </url><url>
+    <loc>https://leifjacky.github.io/</loc>
+    <lastmod>2023-10-10T19:21:26+08:00</lastmod>
+  </url><url>
+    <loc>https://leifjacky.github.io/posts/</loc>
+    <lastmod>2023-10-10T19:21:26+08:00</lastmod>
+  </url><url>
+    <loc>https://leifjacky.github.io/tags/</loc>
     <lastmod>2023-10-10T19:21:26+08:00</lastmod>
   </url><url>
     <loc>https://leifjacky.github.io/categories/_misc/</loc>

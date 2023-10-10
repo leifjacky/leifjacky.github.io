@@ -127,20 +127,6 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2>一种golang死锁情形
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>最近做项目时候碰到了死锁的情况，还原成简单的代码如下：
-package main import ( &#34;fmt&#34; &#34;sync&#34; ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(&#34;dosting start&#34;) // dosth fmt.Println(&#34;dosting end&#34;) } func lock() { fmt.Println(&#34;lock start&#34;) m.Lock() fmt.Println(&#34;lock end&#34;) } func unlock() { fmt.Println(&#34;unlock start&#34;) m.Unlock() fmt.Println(&#34;unlock end&#34;) } 运行结果：
-$ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。...</p>
-  </div>
-  <footer class="entry-footer"><span title='2023-04-08 00:16:03 +0800 CST'>April 8, 2023</span></footer>
-  <a class="entry-link" aria-label="post link to 一种golang死锁情形" href="https://leifjacky.github.io/posts/golang-dead-lock/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
     <h2>Some Linux Shell Scripts
     </h2>
   </header>
@@ -280,12 +266,22 @@ squid 的简单介绍:https://www.cnblogs.com/cherishry/p/5706736.html </p>
   <footer class="entry-footer"><span title='2023-04-08 00:03:30 +0800 CST'>April 8, 2023</span></footer>
   <a class="entry-link" aria-label="post link to 在ubuntu16.04下通过squid进行http/https代理" href="https://leifjacky.github.io/posts/ubuntu-1604-squid/"></a>
 </article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Docker swarm服务HEALTHCHECK的坑
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>服务在启动时便执行 health check，如果这是服务没有准备好（端口未监听，未完成初始化工作），会使得 docker 判定服务为 unhealthy 状态，降低服务可用性。此时应设置较大的 Retries 次数。</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-07 23:41:06 +0800 CST'>April 7, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to Docker swarm服务HEALTHCHECK的坑" href="https://leifjacky.github.io/posts/docker-swarm-healthcheck/"></a>
+</article>
 <footer class="page-footer">
   <nav class="pagination">
     <a class="prev" href="https://leifjacky.github.io/">
       «&nbsp;Prev&nbsp;
-    </a>
-    <a class="next" href="https://leifjacky.github.io/page/3/">Next&nbsp;&nbsp;»
     </a>
   </nav>
 </footer>

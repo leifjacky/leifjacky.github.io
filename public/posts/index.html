@@ -133,29 +133,6 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2>苹果Macbook 12寸安装Archlinux折腾记录
-    </h2>
-  </header>
-  <div class="entry-content">
-    <p>最近1年把工作和日常的主力机都换成了Archlinux，特别喜欢Linux下的平铺式窗口管理器。而在macOS下尝试过使用yabai配合skhd，相比之下还是觉得不够完善。
-再加上手上两台Macbook笔记本已经步入晚年（一台Macbook Pro 2015 Early，一台Macbook 12寸 2017），操作上已经不再爽快，从而产生在Macbook上安装Archlinux的想法，实现所有设备操作模式的大一统😈️。
-早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。
-安装教程参考：
-官方wiki
-Macbook 10,x安装教程
-中文安装指南
-安装过程 禁用服务，修改软件源 systemctl stop reflector.service iwctl timedatectl set-ntp true vim /etc/pacman.d/mirrorlist # Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch # optional pacman -Sy openssh fbset fbset -xres 2304 -yres 1440 systemctl start sshd 分区 第一次安装使用btrfs分区，但是nvme休眠后无法恢复状态。如果遇到SSD在休眠之后无法恢复，可以参考下文试试修改内核启动参数：
-[Solved] System gets borked after suspending
-Controller_failure_due_to_broken_suspend_support
-我尝试以上方法后仍然不行，所以第二次重装使用传统的ext4分区。
-cfdisk /dev/nvme0n1 mkfs.ext4 /dev/nvme0n1p4 mkswap /dev/nvm0n1p3 mount --mkdir /dev/nvme0n1p1 /mnt/boot swapon /dev/nvme0n1p3 安装系统 pacstrap /mnt base base-devel linux linux-firmware pacstrap /mnt networkmanager vim sudo zsh zsh-completions genfstab -U /mnt &gt;&gt; /mnt/etc/fstab 配置系统 arch-chroot /mnt ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime hwclock --systohc vim /etc/hostname vim /etc/hosts vim /etc/locale....</p>
-  </div>
-  <footer class="entry-footer"><span title='2023-10-10 20:06:11 +0800 CST'>October 10, 2023</span></footer>
-  <a class="entry-link" aria-label="post link to 苹果Macbook 12寸安装Archlinux折腾记录" href="https://leifjacky.github.io/posts/archlinux/arch-linux-installation-on-12-inch-macbook-2017/"></a>
-</article>
-
-<article class="post-entry"> 
-  <header class="entry-header">
     <h2>Arch Linux下Fcitx5中文输入法失效，显示Not available
     </h2>
   </header>
@@ -283,6 +260,20 @@ go-graceful-restart-example </p>
   </div>
   <footer class="entry-footer"><span title='2023-04-08 00:17:26 +0800 CST'>April 8, 2023</span></footer>
   <a class="entry-link" aria-label="post link to 一种golang tcp服务热更新方法" href="https://leifjacky.github.io/posts/golang-tcp-graceful-restart/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>一种golang死锁情形
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>最近做项目时候碰到了死锁的情况，还原成简单的代码如下：
+package main import ( &#34;fmt&#34; &#34;sync&#34; ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(&#34;dosting start&#34;) // dosth fmt.Println(&#34;dosting end&#34;) } func lock() { fmt.Println(&#34;lock start&#34;) m.Lock() fmt.Println(&#34;lock end&#34;) } func unlock() { fmt.Println(&#34;unlock start&#34;) m.Unlock() fmt.Println(&#34;unlock end&#34;) } 运行结果：
+$ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。...</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:16:03 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to 一种golang死锁情形" href="https://leifjacky.github.io/posts/golang-dead-lock/"></a>
 </article>
 <footer class="page-footer">
   <nav class="pagination">

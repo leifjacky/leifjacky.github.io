@@ -1,6 +1,6 @@
 ---
 date: "2023-10-10T20:06:11+08:00"
-draft: false
+draft: true
 title: "苹果Macbook 12寸安装Archlinux折腾记录"
 tags: [archlinux, linux]
 ---
@@ -107,7 +107,7 @@ reboot
 
 ### 完成基本安装
 
-![](img/photo_2023-10-10_20-21-02.jpg)
+![](img/photo_2023-10-11_01-41-17.png)
 <br />
 
 安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：
@@ -116,18 +116,29 @@ reboot
 
 1. Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
 
-1. 引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上--remove参数，可以实现开机时按住"Alt"键切换成macOS引导。
+1. 引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上--removable参数，可以实现开机时按住"Alt"键切换成macOS引导。
 
 1. 完成基础安装后，就是折腾各种驱动、软件、环境的配置了。
 
 ---
 
-## 常见问题与解决方法
+### 连接网络
 
-设置[HiDPI](https://wiki.archlinux.org/title/HiDPI)
+```bash
+systemctl enable --now NetworkManager
+nmcli
+```
 
 从休眠状态恢复时，网络会断开，切NetworkManager卡死，无法重新连接网络。这是因为每次启动NetworkManager都会重新随机生成MAC地址。
 
 [Configuring_MAC_address_randomization](https://wiki.archlinux.org/title/NetworkManager#Configuring_MAC_address_randomization)
 
 [[SOLVED] MAC randomization, NM, IWD ?](https://bbs.archlinux.org/viewtopic.php?id=280657)
+
+<br/>
+
+---
+
+## 常见问题与解决方法
+
+设置[HiDPI](https://wiki.archlinux.org/title/HiDPI)

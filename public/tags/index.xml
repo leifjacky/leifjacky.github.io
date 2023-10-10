@@ -6,22 +6,13 @@
     <description>Recent content in Tags on MentosSugus</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Oct 2023 20:06:11 +0800</lastBuildDate><atom:link href="https://leifjacky.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 10 Oct 2023 19:21:26 +0800</lastBuildDate><atom:link href="https://leifjacky.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>archlinux</title>
       <link>https://leifjacky.github.io/tags/archlinux/</link>
-      <pubDate>Tue, 10 Oct 2023 20:06:11 +0800</pubDate>
+      <pubDate>Tue, 10 Oct 2023 19:21:26 +0800</pubDate>
       
       <guid>https://leifjacky.github.io/tags/archlinux/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>linux</title>
-      <link>https://leifjacky.github.io/tags/linux/</link>
-      <pubDate>Tue, 10 Oct 2023 20:06:11 +0800</pubDate>
-      
-      <guid>https://leifjacky.github.io/tags/linux/</guid>
       <description></description>
     </item>
     
@@ -31,6 +22,15 @@
       <pubDate>Tue, 10 Oct 2023 19:21:26 +0800</pubDate>
       
       <guid>https://leifjacky.github.io/tags/fcitx/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>https://leifjacky.github.io/tags/linux/</link>
+      <pubDate>Tue, 10 Oct 2023 19:21:26 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/tags/linux/</guid>
       <description></description>
     </item>
     
