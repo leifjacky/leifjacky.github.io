@@ -2,7 +2,6 @@
 title: "gin使用cache的坑，CachePage与CachePageAtomic的区别"
 date: 2023-04-08T00:18:53+08:00
 draft: false
-categories: [_Misc]
 tags: []
 card: false
 weight: 0

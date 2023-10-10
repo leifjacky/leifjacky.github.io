@@ -133,33 +133,40 @@
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2>Plugins
+    <h2>苹果Macbook 12寸安装Archlinux折腾记录
     </h2>
   </header>
   <div class="entry-content">
-    <p>wbthomason/packer.nvim 插件管理器
-nvim-lua/plenary.nvim 其他插件的重要依赖
-ellisonleao/gruvbox.nvim gruvbox 主题
-nvim-tree/nvim-web-devicons 图标
-nvim-lualine/lualine.nvim 状态栏
-nvim-treesitter/nvim-treesitter 语法树高亮
-nvim-treesitter/playground treesitter 的可视化
-vim-treesitter/nvim-treesitter-textobjects nvim-treesitter/nvim-treesitter-refactor windwp/nvim-ts-autotag JoosepAlviste/nvim-ts-context-commentstring lukas-reineke/indent-blankline.nvim uga-rosa/ccc.nvim nvim-tree/nvim-tree.lua vim-telescope/telescope.nvim nvim-telescope/telescope-fzf-native.nvim nvim-telescope/telescope-symbols.nvim nvim-telescope/telescope-project.nvim X nvim-telescope/telescope-file-browser.nvim nvim-telescope/telescope-media-files.nvim X dhruvmanila/telescope-bookmarks.nvim nvim-telescope/telescope-packer.nvim JoseConseco/telescope_sessions_picker.nvim X HUAHUAI23/telescope-session.nvim X AckslD/nvim-neoclip.lua X rmagatti/session-lens X rcarriga/nvim-notify X numToStr/Navigator.nvim X phaazon/hop.nvim karb94/neoscroll.nvim X folke/which-key.nvim stevearc/dressing.nvim X mrjones2014/legendary.nvim X b3nj5m1n/kommentary X numToStr/Comment.nvim tpope/vim-surround tpope/vim-repeat wellle/targets.vim numToStr/Buffers.nvim junegunn/vim-easy-align numToStr/FTerm.nvim mattn/emmet-vim AndrewRadev/tagalong.vim williamboman/mason.nvim williamboman/mason-lspconfig.nvim neovim/nvim-lspconfig hrsh7th/cmp-nvim-lsp jose-elias-alvarez/null-ls.nvim hrsh7th/nvim-cmp L3MON4D3/LuaSnip rafamadriz/friendly-snippets saadparwaiz1/cmp_luasnip hrsh7th/cmp-path hrsh7th/cmp-buffer hrsh7th/cmp-cmdline ray-x/cmp-treesitter windwp/nvim-autopair ndymass/vim-matchup j-hui/fidget....</p>
+    <p>最近1年把工作和日常的主力机都换成了Archlinux，特别喜欢Linux下的平铺式窗口管理器。而在macOS下尝试过使用yabai配合skhd，相比之下还是觉得不够完善。
+再加上手上两台Macbook笔记本已经步入晚年（一台Macbook Pro 2015 Early，一台Macbook 12寸 2017），操作上已经不再爽快，从而产生在Macbook上安装Archlinux的想法，实现所有设备操作模式的大一统😈️。
+早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。
+安装教程参考：
+官方wiki
+中文安装指南
+↑ 完成基本安装
+安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：
+在macOS分区时候要选择partition
+Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
+引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上–remove参数，可以实现开机时按住&#34;Alt&#34;键切换成macOS引导。
+完成基础安装后，就是折腾各种驱动、软件、环境的配置了。</p>
   </div>
-  <footer class="entry-footer"><span title='2023-04-30 18:13:57 +0800 CST'>April 30, 2023</span></footer>
-  <a class="entry-link" aria-label="post link to Plugins" href="https://leifjacky.github.io/posts/neovim/plugins/"></a>
+  <footer class="entry-footer"><span title='2023-10-10 20:06:11 +0800 CST'>October 10, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to 苹果Macbook 12寸安装Archlinux折腾记录" href="https://leifjacky.github.io/posts/archlinux/arch-linux-installation-on-12-inch-macbook-2017/"></a>
 </article>
 
 <article class="post-entry"> 
   <header class="entry-header">
-    <h2>Linux(Mac)系统配置
+    <h2>Arch Linux下Fcitx5中文输入法失效，显示Not available
     </h2>
   </header>
   <div class="entry-content">
-    <p>alacritty yabai (MacOS) skhd (MacOS) i3 </p>
+    <p>运行时先是发现boost版本更新了，导致无法启动。直接更新fcitx5即可。
+更新fcitx5仍然报错：
+Failed to load library for addon pinyin on /usr/lib/fcitx5/libpinyin.so. Error: /usr/lib/fcitx5/libpinyin.so: undefined symbol: \_ZNK6libime13PinyinContext21candidatesToCursorSetB5cxx11Ev 参考https://bbs.archlinuxcn.org/viewtopic.php?id=12859
+更新libime就好了pacman -S libime</p>
   </div>
-  <footer class="entry-footer"><span title='2023-04-13 20:45:58 +0800 CST'>April 13, 2023</span></footer>
-  <a class="entry-link" aria-label="post link to Linux(Mac)系统配置" href="https://leifjacky.github.io/posts/linux-or-mac-setup/"></a>
+  <footer class="entry-footer"><span title='2023-10-10 19:21:26 +0800 CST'>October 10, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to Arch Linux下Fcitx5中文输入法失效，显示Not available" href="https://leifjacky.github.io/posts/archlinux/arch-linux-fcitx5-shuangpin-not-available/"></a>
 </article>
 
 <article class="post-entry"> 

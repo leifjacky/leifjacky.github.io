@@ -2,7 +2,6 @@
 title: "Aeternity钱包配置"
 date: 2023-04-08T00:12:54+08:00
 draft: false
-categories: [_Misc]
 tags: []
 card: false
 weight: 0

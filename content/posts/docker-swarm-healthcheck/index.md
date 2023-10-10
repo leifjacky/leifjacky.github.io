@@ -2,7 +2,6 @@
 title: "Docker swarm服务HEALTHCHECK的坑"
 date: 2023-04-07T23:41:06+08:00
 draft: false
-categories: [玩具]
 tags: []
 card: true
 weight: 0

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>linux on MentosSugus</title>
+    <link>https://leifjacky.github.io/tags/linux/</link>
+    <description>Recent content in linux on MentosSugus</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Tue, 10 Oct 2023 20:06:11 +0800</lastBuildDate><atom:link href="https://leifjacky.github.io/tags/linux/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>苹果Macbook 12寸安装Archlinux折腾记录</title>
+      <link>https://leifjacky.github.io/posts/archlinux/arch-linux-installation-on-12-inch-macbook-2017/</link>
+      <pubDate>Tue, 10 Oct 2023 20:06:11 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/archlinux/arch-linux-installation-on-12-inch-macbook-2017/</guid>
+      <description>最近1年把工作和日常的主力机都换成了Archlinux，特别喜欢Linux下的平铺式窗口管理器。而在macOS下尝试过使用yabai配合skhd，相比之下还是觉得不够完善。
+再加上手上两台Macbook笔记本已经步入晚年（一台Macbook Pro 2015 Early，一台Macbook 12寸 2017），操作上已经不再爽快，从而产生在Macbook上安装Archlinux的想法，实现所有设备操作模式的大一统😈️。
+早在几个月前已经把比较老的Macbook Pro安装配置好Archlinux并使用一段时间，总体来说还是比较满意的。有了之前的经验，这次来折腾这台12寸Macbook，顺便记录一下过程。
+安装教程参考：
+官方wiki
+中文安装指南
+↑ 完成基本安装
+安装步骤和普通笔记本安装过程基本一样，由于我是macOS和Archlinux双系统，有几点要注意的：
+在macOS分区时候要选择partition
+Archlinux安装过程中，注意原来苹果的EFI分区不要删掉。
+引导方式有几种，我选择了使用grub作为主引导。只要在grub-install时加上&amp;ndash;remove参数，可以实现开机时按住&amp;quot;Alt&amp;quot;键切换成macOS引导。
+完成基础安装后，就是折腾各种驱动、软件、环境的配置了。</description>
+    </item>
+    
+    <item>
+      <title>Arch Linux下Fcitx5中文输入法失效，显示Not available</title>
+      <link>https://leifjacky.github.io/posts/archlinux/arch-linux-fcitx5-shuangpin-not-available/</link>
+      <pubDate>Tue, 10 Oct 2023 19:21:26 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/archlinux/arch-linux-fcitx5-shuangpin-not-available/</guid>
+      <description>运行时先是发现boost版本更新了，导致无法启动。直接更新fcitx5即可。
+更新fcitx5仍然报错：
+Failed to load library for addon pinyin on /usr/lib/fcitx5/libpinyin.so. Error: /usr/lib/fcitx5/libpinyin.so: undefined symbol: \_ZNK6libime13PinyinContext21candidatesToCursorSetB5cxx11Ev 参考https://bbs.archlinuxcn.org/viewtopic.php?id=12859
+更新libime就好了pacman -S libime</description>
+    </item>
+    
+  </channel>
+</rss>

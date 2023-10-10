@@ -6,16 +6,7 @@
     <description>Recent content in linux on MentosSugus</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 13 Apr 2023 20:45:58 +0800</lastBuildDate><atom:link href="https://leifjacky.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Linux(Mac)系统配置</title>
-      <link>https://leifjacky.github.io/posts/linux-or-mac-setup/</link>
-      <pubDate>Thu, 13 Apr 2023 20:45:58 +0800</pubDate>
-      
-      <guid>https://leifjacky.github.io/posts/linux-or-mac-setup/</guid>
-      <description>alacritty yabai (MacOS) skhd (MacOS) i3 </description>
-    </item>
-    
+    <lastBuildDate>Sat, 08 Apr 2023 00:13:45 +0800</lastBuildDate><atom:link href="https://leifjacky.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Some Linux Shell Scripts</title>
       <link>https://leifjacky.github.io/posts/linux-shell-scripts/</link>

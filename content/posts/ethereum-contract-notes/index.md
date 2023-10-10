@@ -2,7 +2,6 @@
 title: "Ethereum Contract Notes"
 date: 2023-04-08T00:23:00+08:00
 draft: false
-categories: [_Misc]
 tags: []
 card: false
 weight: 0
