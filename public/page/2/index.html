@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head>
+	<meta name="generator" content="Hugo 0.119.0"><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>MentosSugus</title>
+
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="canonical" href="https://leifjacky.github.io/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.5cfc680b1eeaeef9efbced92d46c2a9e876b72ee14fba85846afc4cff9e6e6f8.css" integrity="sha256-XPxoCx7q7vnvvO2S1Gwqnodrcu4U&#43;6hYRq/Ez/nm5vg=" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://leifjacky.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://leifjacky.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://leifjacky.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://leifjacky.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://leifjacky.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="https://leifjacky.github.io/index.xml">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="MentosSugus" />
+<meta property="og:description" content="" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://leifjacky.github.io/" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MentosSugus"/>
+<meta name="twitter:description" content=""/>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "MentosSugus",
+  "url": "https://leifjacky.github.io/",
+  "description": "",
+  "thumbnailUrl": "https://leifjacky.github.io/favicon.ico",
+  "sameAs": [
+      
+  ]
+}
+</script>
+</head>
+
+<body class="list" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://leifjacky.github.io/" accesskey="h" title="MentosSugus (Alt + H)">MentosSugus</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>一种golang死锁情形
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>最近做项目时候碰到了死锁的情况，还原成简单的代码如下：
+package main import ( &#34;fmt&#34; &#34;sync&#34; ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(&#34;dosting start&#34;) // dosth fmt.Println(&#34;dosting end&#34;) } func lock() { fmt.Println(&#34;lock start&#34;) m.Lock() fmt.Println(&#34;lock end&#34;) } func unlock() { fmt.Println(&#34;unlock start&#34;) m.Unlock() fmt.Println(&#34;unlock end&#34;) } 运行结果：
+$ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。...</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:16:03 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to 一种golang死锁情形" href="https://leifjacky.github.io/posts/golang-dead-lock/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Some Linux Shell Scripts
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>linux 添加 swap 分区
+fallocate -l 8G /swapfile chmod 600 /swapfile mkswap /swapfile swapon /swapfile ubuntu16.04 安装 postgreSQL10
+echo &#34;deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main&#34; &gt;&gt; /etc/apt/sources.list.d/dgpg.list wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - sudo apt-get update sudo apt install postgresql-10 参数调整：
+max_connections = 1024 shared_buffers = 4GB # 内存四分之一 work_mem = 16MB maintenance_work_mem = 256MB effective_cache_size = 8GB # 内存一半 ubuntu16.04 安装 redis5.0.5
+wget http://download.redis.io/releases/redis-5.0.5.tar.gz tar xvf redis-5.0.5.tar.gz cd redis-5....</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:13:45 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to Some Linux Shell Scripts" href="https://leifjacky.github.io/posts/linux-shell-scripts/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Aeternity钱包配置
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>钱包安装 https://github.com/aeternity/aeternity/releases
+下载钱包文件：
+mkdir aeternity &amp;&amp; cd aeternity wget https://github.com/aeternity/aeternity/releases/download/v2.5.0/aeternity-2.5.0-ubuntu-x86_64.tar.gz tar xvf aeternity-2.5.0-ubuntu-x86_64.tar.gz 安装依赖(https://github.com/aeternity/documentation-hub/blob/master/docs/tutorials/run-node-on-ubuntu-1804.md)：
+Libsodium v1.0.16 Openssl 1.0.0 sudo apt-get install build-essential curl -O https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz tar -xf libsodium-1.0.16.tar.gz &amp;&amp; cd libsodium-1.0.16 ./configure &amp;&amp; make &amp;&amp; sudo make install &amp;&amp; sudo ldconfig 配置节点：
+写入以下内容 epoch.yaml
+sync: port: 3015 keys: dir: keys peer_password: &#34;secret&#34; http: external: port: 3013 internal: port: 3113 websocket: channel: port: 3014 mining: beneficiary: &#34;beneficiary_pubkey_to_be_replaced&#34; autostart: false chain: persist: true db_path: ....</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:12:54 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to Aeternity钱包配置" href="https://leifjacky.github.io/posts/aeternity-wallet-config/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>最短编辑距离 Golang
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>问题 给定两个字符串 a 和 b，只允许以下三种操作：
+插入一个字符； 删除一个字符； 替换一个字符。 求：把 a 转换成 b 的最小操作次数，也就是所谓的最小编辑距离。
+举例： “xy” =&gt; “xz”，只需要把 y 替换成 z，因此，最小编辑距离为 1。 “xyz” =&gt; “xy”，只需要删除 z ，因此，最小编辑距离为 1。
+思路 本题与最长公共子序列有相似性。插入和删除其实是逆操作，操作与 ret[i-1][j]与 ret[i][j-1]有关，替换则是与 ret[i-1][j-1]有关。
+代码 package main import &#34;fmt&#34; const ( maxDistance = 0x3fffffff ) type Row []int func MinDistance(str1, str2 string) int { r1, r2 := []rune(str1), []rune(str2) return minDistance(r1, r2) } func minDistance(r1, r2 []rune) int { l1, l2 := len(r1), len(r2) a := genArray(l1, l2) for i := 1; i &lt;= l1; i&#43;&#43; { for j := 1; j &lt;= l2; j&#43;&#43; { if r1[i-1] == r2[j-1] {	// 无需进行操作 a[i][j] = a[i-1][j-1] } else { a[i][j] = min(a[i-1][j-1], min(a[i-1][j], a[i][j-1])) &#43; 1 // 从三种操作中选择最优 } } } return a[l1][l2] } func genArray(l1, l2 int) []Row { a := make([]Row, l1&#43;1) for i := 0; i &lt;= l1; i&#43;&#43; { a[i] = make(Row, l2&#43;1) for j := 0; j &lt;= l2; j&#43;&#43; { a[i][j] = maxDistance if i == 0 || j == 0 { a[i][j] = max(i, j) } } } return a } func max(a, b int) int { if a &gt; b { return a } return b } func min(a, b int) int { if a &lt; b { return a } return b } func main() { a := &#34;spiderman&#34; b := &#34;superman&#34; fmt....</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:12:00 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to 最短编辑距离 Golang" href="https://leifjacky.github.io/posts/golang/mindistance-problem/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>tcpdump 使用实例
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>tcpdump 参数
+-A 用户友好的方式进行输出 -D, –list-interfaces 输出可用设备 -i interface, –interface=interface 监听指定设备 -e 输出 MAC 地址 –immediate-mode 实时输出，一般不使用 -n 禁止转换地址（etc ip,port）为名称 -#, –number 在每个包开头添加编号 -Q direction, –direction=direction 指定捕捉方向 in, out, inout -q 安静模式，输出少量协议信息 -s snaplen, –snapshot-length=snaplen 只截取报文前snaplen个字节内容 -tt 输出 timestamp 格式 以下指令监听eth0网卡，目标地址为192.168.2.10，源地址处于192.168网段，数据包长度范围在160~200之间的数据包。数据以安静模式输出，转换为易读的字符串，不对 ip 做反向 dns 操作，只筛选方向为流入的数据，时间以timestamp显示。
+tcpdump -i eth0 &#39;tcp and dst host 192.168.2.10 and src net 192.168 and len &gt; 160 and len &lt; 200&#39; -q -A -n -Q in -tt 参考资料：...</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:10:58 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to tcpdump 使用实例" href="https://leifjacky.github.io/posts/tcpdump-usage/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>python3 基本数据类型
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p># python3 基本数据类型 counter = 100 # 整型变量 miles = 1000.0 # 浮点型变量 name = &#34;runoob&#34; # 字符串 print(counter) print(miles) print(name) # 多变量赋值 a = b = c = 1 x, y, z = 1, 2, &#34;runoob&#34; # 数字类型int, float, bool, complex a, b, c, d = 20, 5.5, True, 4 &#43; 3j print(type(a), type(b), type(c), type(d)) print(isinstance(a, int)) # isinstance 和 type 的区别 class A: pass class B(A): pass print(isinstance(A(), A)) # returns True print(type(A()) == A) # returns True print(isinstance(B(), A)) # returns True print(type(B()) == A) # returns False # type()不会认为子类是一种父类类型。 # isinstance()会认为子类是一种父类类型。 del a del x, y # 数值运算 print(5 &#43; 4, 4....</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:10:00 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to python3 基本数据类型" href="https://leifjacky.github.io/posts/python3-datatype/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>python3基础语法
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p># 基础语法 import keyword print(keyword.kwlist) # 注释 print(&#34;Hello, Python!&#34;) &#39;&#39;&#39; 多行注释1 多行注释1 &#39;&#39;&#39; &#34;&#34;&#34; 多行注释2 多行注释2 &#34;&#34;&#34; # 缩进 flag = 0 if flag == 0: print(&#34;Answer&#34;) print(&#34;True&#34;) else: print(&#34;Answer&#34;) print(&#34;False&#34;) # 多行 a = b = c = 1 total = a &#43; \ b &#43; \ c x = &#34;a&#34; y = &#34;b&#34; # 换行输出 print(x) print(y) print(&#39;---------&#39;) # 不换行输出 print(x, end=&#34; &#34;) print(y, end=&#34; &#34;) print() # import与from....</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:08:52 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to python3基础语法" href="https://leifjacky.github.io/posts/python3-grammar/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>ubuntu 16.04 安装配置haproxy
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>haproxy 是一款负载均衡软件，可以实现 TCP 和 HTTP 模式下的流量代理转发。
+1.在官网下载源码
+wget http://www.haproxy.org/download/1.8/src/haproxy-1.8.1.tar.gz 2.解压
+tar xvf haproxy-1.8.1.tar.gz 3.查看 README 文件，haproxy 支持以下系统的编译，在这里需要选择合适的版本参数。在这里我使用 linux2628
+To build haproxy, you have to choose your target OS amongst the following ones and assign it to the TARGET variable : - linux22 for Linux 2.2 - linux24 for Linux 2.4 and above (default) - linux24e for Linux 2.4 with support for a working epoll (&gt; 0.21) - linux26 for Linux 2....</p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:06:21 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to ubuntu 16.04 安装配置haproxy" href="https://leifjacky.github.io/posts/ubuntu-1604-haproxy/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>ubuntu 16.04 搭建shadowsocks服务器
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Shadowsocks 优势在于能够同时为 Win、Mac、iOS、Android 等设备同时提供服务，使用 sock5 进行代理，相较于 VPN 稳定高效。
+安装 ss 环境，需要先安装pip：
+apt install -y python-gevent python-pip pip install --upgrade pip pip install setuptools pip install shadowsocks 写入配置文件/etc/shadowsocks.json：
+echo &#39;{ &#34;server&#34;:&#34;0.0.0.0&#34;, &#34;local_address&#34;: &#34;127.0.0.1&#34;, &#34;local_port&#34;:1080, &#34;port_password&#34;: { &#34;18080&#34;: &#34;password&#34; }, &#34;timeout&#34;:300, &#34;method&#34;:&#34;rc4-md5&#34;, &#34;fast_open&#34;: false }&#39; &gt; /etc/shadowsocks.json 启动服务
+ssserver -c /etc/shadowsocks.json -d start 配置开机自动启动：
+echo &#39;#!/bin/sh -e ssserver -c /etc/shadowsocks.json -d start exit 0&#39; &gt; /etc/rc.local 参考资料：
+官网：https://shadowsocks.org/ github 主页：https://github.com/shadowsocks </p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:04:53 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to ubuntu 16.04 搭建shadowsocks服务器" href="https://leifjacky.github.io/posts/ubuntu-1604-shadowsocks/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>在ubuntu16.04下通过squid进行http/https代理
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>1. 服务端设置 安装服务并编辑配置文件
+apt install squid vi /etc/squid/squid.conf 在 squid.conf 首行添加
+http_access allow all 找到http_port 3128，将 3128 改为自己想要的端口。
+# Squid normally listens to port 3128 http_port 3128 重启 squid 服务
+service squid restart 观察日志，看是否正常。
+tail /var/log/squid/access.log 2. 客户端设置 在客户端使用填写hostname:port为代理服务器。
+命令行下可以使用
+export http_proxy=hostname:port export https_proxy=hostname:port Just enjoy ！！！
+参考资料：
+squid 的简单介绍:https://www.cnblogs.com/cherishry/p/5706736.html </p>
+  </div>
+  <footer class="entry-footer"><span title='2023-04-08 00:03:30 +0800 CST'>April 8, 2023</span></footer>
+  <a class="entry-link" aria-label="post link to 在ubuntu16.04下通过squid进行http/https代理" href="https://leifjacky.github.io/posts/ubuntu-1604-squid/"></a>
+</article>
+<footer class="page-footer">
+  <nav class="pagination">
+    <a class="prev" href="https://leifjacky.github.io/">
+      «&nbsp;Prev&nbsp;
+    </a>
+    <a class="next" href="https://leifjacky.github.io/page/3/">Next&nbsp;&nbsp;»
+    </a>
+  </nav>
+</footer>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://leifjacky.github.io/">MentosSugus</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

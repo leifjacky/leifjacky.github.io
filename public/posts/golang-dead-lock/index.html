@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>一种golang死锁情形 | MentosSugus</title>
+<meta name="keywords" content="">
+<meta name="description" content="最近做项目时候碰到了死锁的情况，还原成简单的代码如下：
+package main import ( &#34;fmt&#34; &#34;sync&#34; ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(&#34;dosting start&#34;) // dosth fmt.Println(&#34;dosting end&#34;) } func lock() { fmt.Println(&#34;lock start&#34;) m.Lock() fmt.Println(&#34;lock end&#34;) } func unlock() { fmt.Println(&#34;unlock start&#34;) m.Unlock() fmt.Println(&#34;unlock end&#34;) } 运行结果：
+$ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。">
+<meta name="author" content="">
+<link rel="canonical" href="https://leifjacky.github.io/posts/golang-dead-lock/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.5cfc680b1eeaeef9efbced92d46c2a9e876b72ee14fba85846afc4cff9e6e6f8.css" integrity="sha256-XPxoCx7q7vnvvO2S1Gwqnodrcu4U&#43;6hYRq/Ez/nm5vg=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://leifjacky.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://leifjacky.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://leifjacky.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://leifjacky.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://leifjacky.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="一种golang死锁情形" />
+<meta property="og:description" content="最近做项目时候碰到了死锁的情况，还原成简单的代码如下：
+package main import ( &#34;fmt&#34; &#34;sync&#34; ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(&#34;dosting start&#34;) // dosth fmt.Println(&#34;dosting end&#34;) } func lock() { fmt.Println(&#34;lock start&#34;) m.Lock() fmt.Println(&#34;lock end&#34;) } func unlock() { fmt.Println(&#34;unlock start&#34;) m.Unlock() fmt.Println(&#34;unlock end&#34;) } 运行结果：
+$ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://leifjacky.github.io/posts/golang-dead-lock/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-04-08T00:16:03+08:00" />
+<meta property="article:modified_time" content="2023-04-08T00:16:03+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="一种golang死锁情形"/>
+<meta name="twitter:description" content="最近做项目时候碰到了死锁的情况，还原成简单的代码如下：
+package main import ( &#34;fmt&#34; &#34;sync&#34; ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(&#34;dosting start&#34;) // dosth fmt.Println(&#34;dosting end&#34;) } func lock() { fmt.Println(&#34;lock start&#34;) m.Lock() fmt.Println(&#34;lock end&#34;) } func unlock() { fmt.Println(&#34;unlock start&#34;) m.Unlock() fmt.Println(&#34;unlock end&#34;) } 运行结果：
+$ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://leifjacky.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "一种golang死锁情形",
+      "item": "https://leifjacky.github.io/posts/golang-dead-lock/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "一种golang死锁情形",
+  "name": "一种golang死锁情形",
+  "description": "最近做项目时候碰到了死锁的情况，还原成简单的代码如下：\npackage main import ( \u0026#34;fmt\u0026#34; \u0026#34;sync\u0026#34; ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(\u0026#34;dosting start\u0026#34;) // dosth fmt.Println(\u0026#34;dosting end\u0026#34;) } func lock() { fmt.Println(\u0026#34;lock start\u0026#34;) m.Lock() fmt.Println(\u0026#34;lock end\u0026#34;) } func unlock() { fmt.Println(\u0026#34;unlock start\u0026#34;) m.Unlock() fmt.Println(\u0026#34;unlock end\u0026#34;) } 运行结果：\n$ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。",
+  "keywords": [
+    
+  ],
+  "articleBody": "最近做项目时候碰到了死锁的情况，还原成简单的代码如下：\npackage main import ( \"fmt\" \"sync\" ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(\"dosting start\") // dosth fmt.Println(\"dosting end\") } func lock() { fmt.Println(\"lock start\") m.Lock() fmt.Println(\"lock end\") } func unlock() { fmt.Println(\"unlock start\") m.Unlock() fmt.Println(\"unlock end\") } 运行结果：\n$ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。\nfunc main() { lock() defer unlock() go doSthing() for { // accept for tcp conn } } 运行结果：\n$ go run main.go lock start lock end lock start 后面就一直卡住，发生死锁，这种情况下并不会报错，随着程序执行更多的 goroutine 申请锁资源，通过观察 htop 负载会一直增加，并且影响到其他业务的运行。 我在实际业务中需要对 map 进行读写所以用到了读写互斥锁，写的时候还使用到了带缓存的 channel。简单还原成如下：\npackage main import ( \"fmt\" \"math/rand\" \"sync\" ) const ( mCnt = 10 chanSize = 10 ) var m map[int]int var mu *sync.RWMutex func init() { m = make(map[int]int) mu = \u0026sync.RWMutex{} for i := 0; i \u003c mCnt; i++ { m[i] = i } } func main() { go doSth() for { } } func doSth() { mu.RLock() defer mu.RUnlock() n := 0 ch := make(chan int, chanSize) for k := range m { n++ ch \u003c- n go func(k int) { defer func() { \u003c-ch }() if rand.Int()%100 == 0 { addM(k) } }(k) } fmt.Printf(\"add %d values\\n\", n) } func addM(key int) { mu.Lock() defer mu.Unlock() m[key]++ } 在 map 容量(mCnt)小的时候 channel 通常不会满，不会发生死锁。在检查代码与测试时都没有发现这个问题，但在实际环境，map 数据量大的情况下可能会出现死锁的情形。这种情况也是相对比较隐蔽的。 考虑到我实际业务中不需要保证 addM 实时运行，所以直接使用go addM()来避免死锁，当然还有其他方法可以实现，这里就不讨论了。\n",
+  "wordCount" : "230",
+  "inLanguage": "en",
+  "datePublished": "2023-04-08T00:16:03+08:00",
+  "dateModified": "2023-04-08T00:16:03+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://leifjacky.github.io/posts/golang-dead-lock/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "MentosSugus",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://leifjacky.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://leifjacky.github.io/" accesskey="h" title="MentosSugus (Alt + H)">MentosSugus</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      一种golang死锁情形
+    </h1>
+    <div class="post-meta"><span title='2023-04-08 00:16:03 +0800 CST'>April 8, 2023</span>
+
+</div>
+  </header> 
+  <div class="post-content"><p>最近做项目时候碰到了死锁的情况，还原成简单的代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">m</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">unlock</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">doSthing</span>()
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSthing</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">unlock</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;dosting start&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// dosth
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;dosting end&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">lock</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;lock start&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;lock end&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">unlock</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;unlock start&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#e6db74">&#34;unlock end&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>运行结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ go run main.go
+</span></span><span style="display:flex;"><span>lock start
+</span></span><span style="display:flex;"><span>lock end
+</span></span><span style="display:flex;"><span>lock start
+</span></span><span style="display:flex;"><span>fatal error: all goroutines are asleep - deadlock!
+</span></span></code></pre></div><p>想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">lock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">unlock</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">doSthing</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// accept for tcp conn
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>运行结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ go run main.go
+</span></span><span style="display:flex;"><span>lock start
+</span></span><span style="display:flex;"><span>lock end
+</span></span><span style="display:flex;"><span>lock start
+</span></span></code></pre></div><p>后面就一直卡住，发生死锁，这种情况下并不会报错，随着程序执行更多的 goroutine 申请锁资源，通过观察 htop 负载会一直增加，并且影响到其他业务的运行。
+我在实际业务中需要对 map 进行读写所以用到了读写互斥锁，写的时候还使用到了带缓存的 channel。简单还原成如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#f92672">package</span> <span style="color:#a6e22e">main</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;fmt&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;math/rand&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;sync&#34;</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">const</span> (
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">mCnt</span>     = <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">chanSize</span> = <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">m</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">int</span>]<span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> <span style="color:#a6e22e">mu</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">init</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">m</span> = make(<span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">int</span>]<span style="color:#66d9ef">int</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">mu</span> = <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">RWMutex</span>{}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>; <span style="color:#a6e22e">i</span> &lt; <span style="color:#a6e22e">mCnt</span>; <span style="color:#a6e22e">i</span><span style="color:#f92672">++</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">m</span>[<span style="color:#a6e22e">i</span>] = <span style="color:#a6e22e">i</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">go</span> <span style="color:#a6e22e">doSth</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> {
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">doSth</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RLock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">RUnlock</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">n</span> <span style="color:#f92672">:=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ch</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">int</span>, <span style="color:#a6e22e">chanSize</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">m</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">n</span><span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">ch</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">n</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">k</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">defer</span> <span style="color:#66d9ef">func</span>() {
+</span></span><span style="display:flex;"><span>                <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">ch</span>
+</span></span><span style="display:flex;"><span>            }()
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">rand</span>.<span style="color:#a6e22e">Int</span>()<span style="color:#f92672">%</span><span style="color:#ae81ff">100</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> {
+</span></span><span style="display:flex;"><span>                <span style="color:#a6e22e">addM</span>(<span style="color:#a6e22e">k</span>)
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>        }(<span style="color:#a6e22e">k</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Printf</span>(<span style="color:#e6db74">&#34;add %d values\n&#34;</span>, <span style="color:#a6e22e">n</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">addM</span>(<span style="color:#a6e22e">key</span> <span style="color:#66d9ef">int</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">mu</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">m</span>[<span style="color:#a6e22e">key</span>]<span style="color:#f92672">++</span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>在 map 容量(mCnt)小的时候 channel 通常不会满，不会发生死锁。在检查代码与测试时都没有发现这个问题，但在实际环境，map 数据量大的情况下可能会出现死锁的情形。这种情况也是相对比较隐蔽的。
+考虑到我实际业务中不需要保证 addM 实时运行，所以直接使用<code>go addM()</code>来避免死锁，当然还有其他方法可以实现，这里就不讨论了。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://leifjacky.github.io/">MentosSugus</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

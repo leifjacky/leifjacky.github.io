@@ -5,6 +5,61 @@
     <link>https://leifjacky.github.io/categories/</link>
     <description>Recent content in Categories on MentosSugus</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://leifjacky.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Sun, 30 Apr 2023 18:13:57 +0800</lastBuildDate><atom:link href="https://leifjacky.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Neovim</title>
+      <link>https://leifjacky.github.io/categories/neovim/</link>
+      <pubDate>Sun, 30 Apr 2023 18:13:57 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/categories/neovim/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>linux</title>
+      <link>https://leifjacky.github.io/categories/linux/</link>
+      <pubDate>Thu, 13 Apr 2023 20:45:58 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/categories/linux/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>mac</title>
+      <link>https://leifjacky.github.io/categories/mac/</link>
+      <pubDate>Thu, 13 Apr 2023 20:45:58 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/categories/mac/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>_Misc</title>
+      <link>https://leifjacky.github.io/categories/_misc/</link>
+      <pubDate>Sun, 09 Apr 2023 01:38:33 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/categories/_misc/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>dog</title>
+      <link>https://leifjacky.github.io/categories/dog/</link>
+      <pubDate>Sun, 09 Apr 2023 01:01:12 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/categories/dog/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>玩具</title>
+      <link>https://leifjacky.github.io/categories/%E7%8E%A9%E5%85%B7/</link>
+      <pubDate>Fri, 07 Apr 2023 23:41:06 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/categories/%E7%8E%A9%E5%85%B7/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

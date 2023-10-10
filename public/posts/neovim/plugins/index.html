@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Plugins | MentosSugus</title>
+<meta name="keywords" content="">
+<meta name="description" content="wbthomason/packer.nvim 插件管理器
+nvim-lua/plenary.nvim 其他插件的重要依赖
+ellisonleao/gruvbox.nvim gruvbox 主题
+nvim-tree/nvim-web-devicons 图标
+nvim-lualine/lualine.nvim 状态栏
+nvim-treesitter/nvim-treesitter 语法树高亮
+nvim-treesitter/playground treesitter 的可视化
+vim-treesitter/nvim-treesitter-textobjects nvim-treesitter/nvim-treesitter-refactor windwp/nvim-ts-autotag JoosepAlviste/nvim-ts-context-commentstring lukas-reineke/indent-blankline.nvim uga-rosa/ccc.nvim nvim-tree/nvim-tree.lua vim-telescope/telescope.nvim nvim-telescope/telescope-fzf-native.nvim nvim-telescope/telescope-symbols.nvim nvim-telescope/telescope-project.nvim X nvim-telescope/telescope-file-browser.nvim nvim-telescope/telescope-media-files.nvim X dhruvmanila/telescope-bookmarks.nvim nvim-telescope/telescope-packer.nvim JoseConseco/telescope_sessions_picker.nvim X HUAHUAI23/telescope-session.nvim X AckslD/nvim-neoclip.lua X rmagatti/session-lens X rcarriga/nvim-notify X numToStr/Navigator.nvim X phaazon/hop.nvim karb94/neoscroll.nvim X folke/which-key.nvim stevearc/dressing.nvim X mrjones2014/legendary.nvim X b3nj5m1n/kommentary X numToStr/Comment.nvim tpope/vim-surround tpope/vim-repeat wellle/targets.vim numToStr/Buffers.nvim junegunn/vim-easy-align numToStr/FTerm.nvim mattn/emmet-vim AndrewRadev/tagalong.vim williamboman/mason.nvim williamboman/mason-lspconfig.nvim neovim/nvim-lspconfig hrsh7th/cmp-nvim-lsp jose-elias-alvarez/null-ls.nvim hrsh7th/nvim-cmp L3MON4D3/LuaSnip rafamadriz/friendly-snippets saadparwaiz1/cmp_luasnip hrsh7th/cmp-path hrsh7th/cmp-buffer hrsh7th/cmp-cmdline ray-x/cmp-treesitter windwp/nvim-autopair ndymass/vim-matchup j-hui/fidget.">
+<meta name="author" content="">
+<link rel="canonical" href="https://leifjacky.github.io/posts/neovim/plugins/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.5cfc680b1eeaeef9efbced92d46c2a9e876b72ee14fba85846afc4cff9e6e6f8.css" integrity="sha256-XPxoCx7q7vnvvO2S1Gwqnodrcu4U&#43;6hYRq/Ez/nm5vg=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://leifjacky.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://leifjacky.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://leifjacky.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://leifjacky.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://leifjacky.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Plugins" />
+<meta property="og:description" content="wbthomason/packer.nvim 插件管理器
+nvim-lua/plenary.nvim 其他插件的重要依赖
+ellisonleao/gruvbox.nvim gruvbox 主题
+nvim-tree/nvim-web-devicons 图标
+nvim-lualine/lualine.nvim 状态栏
+nvim-treesitter/nvim-treesitter 语法树高亮
+nvim-treesitter/playground treesitter 的可视化
+vim-treesitter/nvim-treesitter-textobjects nvim-treesitter/nvim-treesitter-refactor windwp/nvim-ts-autotag JoosepAlviste/nvim-ts-context-commentstring lukas-reineke/indent-blankline.nvim uga-rosa/ccc.nvim nvim-tree/nvim-tree.lua vim-telescope/telescope.nvim nvim-telescope/telescope-fzf-native.nvim nvim-telescope/telescope-symbols.nvim nvim-telescope/telescope-project.nvim X nvim-telescope/telescope-file-browser.nvim nvim-telescope/telescope-media-files.nvim X dhruvmanila/telescope-bookmarks.nvim nvim-telescope/telescope-packer.nvim JoseConseco/telescope_sessions_picker.nvim X HUAHUAI23/telescope-session.nvim X AckslD/nvim-neoclip.lua X rmagatti/session-lens X rcarriga/nvim-notify X numToStr/Navigator.nvim X phaazon/hop.nvim karb94/neoscroll.nvim X folke/which-key.nvim stevearc/dressing.nvim X mrjones2014/legendary.nvim X b3nj5m1n/kommentary X numToStr/Comment.nvim tpope/vim-surround tpope/vim-repeat wellle/targets.vim numToStr/Buffers.nvim junegunn/vim-easy-align numToStr/FTerm.nvim mattn/emmet-vim AndrewRadev/tagalong.vim williamboman/mason.nvim williamboman/mason-lspconfig.nvim neovim/nvim-lspconfig hrsh7th/cmp-nvim-lsp jose-elias-alvarez/null-ls.nvim hrsh7th/nvim-cmp L3MON4D3/LuaSnip rafamadriz/friendly-snippets saadparwaiz1/cmp_luasnip hrsh7th/cmp-path hrsh7th/cmp-buffer hrsh7th/cmp-cmdline ray-x/cmp-treesitter windwp/nvim-autopair ndymass/vim-matchup j-hui/fidget." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://leifjacky.github.io/posts/neovim/plugins/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-04-30T18:13:57+08:00" />
+<meta property="article:modified_time" content="2023-04-30T18:13:57+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Plugins"/>
+<meta name="twitter:description" content="wbthomason/packer.nvim 插件管理器
+nvim-lua/plenary.nvim 其他插件的重要依赖
+ellisonleao/gruvbox.nvim gruvbox 主题
+nvim-tree/nvim-web-devicons 图标
+nvim-lualine/lualine.nvim 状态栏
+nvim-treesitter/nvim-treesitter 语法树高亮
+nvim-treesitter/playground treesitter 的可视化
+vim-treesitter/nvim-treesitter-textobjects nvim-treesitter/nvim-treesitter-refactor windwp/nvim-ts-autotag JoosepAlviste/nvim-ts-context-commentstring lukas-reineke/indent-blankline.nvim uga-rosa/ccc.nvim nvim-tree/nvim-tree.lua vim-telescope/telescope.nvim nvim-telescope/telescope-fzf-native.nvim nvim-telescope/telescope-symbols.nvim nvim-telescope/telescope-project.nvim X nvim-telescope/telescope-file-browser.nvim nvim-telescope/telescope-media-files.nvim X dhruvmanila/telescope-bookmarks.nvim nvim-telescope/telescope-packer.nvim JoseConseco/telescope_sessions_picker.nvim X HUAHUAI23/telescope-session.nvim X AckslD/nvim-neoclip.lua X rmagatti/session-lens X rcarriga/nvim-notify X numToStr/Navigator.nvim X phaazon/hop.nvim karb94/neoscroll.nvim X folke/which-key.nvim stevearc/dressing.nvim X mrjones2014/legendary.nvim X b3nj5m1n/kommentary X numToStr/Comment.nvim tpope/vim-surround tpope/vim-repeat wellle/targets.vim numToStr/Buffers.nvim junegunn/vim-easy-align numToStr/FTerm.nvim mattn/emmet-vim AndrewRadev/tagalong.vim williamboman/mason.nvim williamboman/mason-lspconfig.nvim neovim/nvim-lspconfig hrsh7th/cmp-nvim-lsp jose-elias-alvarez/null-ls.nvim hrsh7th/nvim-cmp L3MON4D3/LuaSnip rafamadriz/friendly-snippets saadparwaiz1/cmp_luasnip hrsh7th/cmp-path hrsh7th/cmp-buffer hrsh7th/cmp-cmdline ray-x/cmp-treesitter windwp/nvim-autopair ndymass/vim-matchup j-hui/fidget."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://leifjacky.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Plugins",
+      "item": "https://leifjacky.github.io/posts/neovim/plugins/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Plugins",
+  "name": "Plugins",
+  "description": "wbthomason/packer.nvim 插件管理器\nnvim-lua/plenary.nvim 其他插件的重要依赖\nellisonleao/gruvbox.nvim gruvbox 主题\nnvim-tree/nvim-web-devicons 图标\nnvim-lualine/lualine.nvim 状态栏\nnvim-treesitter/nvim-treesitter 语法树高亮\nnvim-treesitter/playground treesitter 的可视化\nvim-treesitter/nvim-treesitter-textobjects nvim-treesitter/nvim-treesitter-refactor windwp/nvim-ts-autotag JoosepAlviste/nvim-ts-context-commentstring lukas-reineke/indent-blankline.nvim uga-rosa/ccc.nvim nvim-tree/nvim-tree.lua vim-telescope/telescope.nvim nvim-telescope/telescope-fzf-native.nvim nvim-telescope/telescope-symbols.nvim nvim-telescope/telescope-project.nvim X nvim-telescope/telescope-file-browser.nvim nvim-telescope/telescope-media-files.nvim X dhruvmanila/telescope-bookmarks.nvim nvim-telescope/telescope-packer.nvim JoseConseco/telescope_sessions_picker.nvim X HUAHUAI23/telescope-session.nvim X AckslD/nvim-neoclip.lua X rmagatti/session-lens X rcarriga/nvim-notify X numToStr/Navigator.nvim X phaazon/hop.nvim karb94/neoscroll.nvim X folke/which-key.nvim stevearc/dressing.nvim X mrjones2014/legendary.nvim X b3nj5m1n/kommentary X numToStr/Comment.nvim tpope/vim-surround tpope/vim-repeat wellle/targets.vim numToStr/Buffers.nvim junegunn/vim-easy-align numToStr/FTerm.nvim mattn/emmet-vim AndrewRadev/tagalong.vim williamboman/mason.nvim williamboman/mason-lspconfig.nvim neovim/nvim-lspconfig hrsh7th/cmp-nvim-lsp jose-elias-alvarez/null-ls.nvim hrsh7th/nvim-cmp L3MON4D3/LuaSnip rafamadriz/friendly-snippets saadparwaiz1/cmp_luasnip hrsh7th/cmp-path hrsh7th/cmp-buffer hrsh7th/cmp-cmdline ray-x/cmp-treesitter windwp/nvim-autopair ndymass/vim-matchup j-hui/fidget.",
+  "keywords": [
+    
+  ],
+  "articleBody": "wbthomason/packer.nvim 插件管理器\nnvim-lua/plenary.nvim 其他插件的重要依赖\nellisonleao/gruvbox.nvim gruvbox 主题\nnvim-tree/nvim-web-devicons 图标\nnvim-lualine/lualine.nvim 状态栏\nnvim-treesitter/nvim-treesitter 语法树高亮\nnvim-treesitter/playground treesitter 的可视化\nvim-treesitter/nvim-treesitter-textobjects nvim-treesitter/nvim-treesitter-refactor windwp/nvim-ts-autotag JoosepAlviste/nvim-ts-context-commentstring lukas-reineke/indent-blankline.nvim uga-rosa/ccc.nvim nvim-tree/nvim-tree.lua vim-telescope/telescope.nvim nvim-telescope/telescope-fzf-native.nvim nvim-telescope/telescope-symbols.nvim nvim-telescope/telescope-project.nvim X nvim-telescope/telescope-file-browser.nvim nvim-telescope/telescope-media-files.nvim X dhruvmanila/telescope-bookmarks.nvim nvim-telescope/telescope-packer.nvim JoseConseco/telescope_sessions_picker.nvim X HUAHUAI23/telescope-session.nvim X AckslD/nvim-neoclip.lua X rmagatti/session-lens X rcarriga/nvim-notify X numToStr/Navigator.nvim X phaazon/hop.nvim karb94/neoscroll.nvim X folke/which-key.nvim stevearc/dressing.nvim X mrjones2014/legendary.nvim X b3nj5m1n/kommentary X numToStr/Comment.nvim tpope/vim-surround tpope/vim-repeat wellle/targets.vim numToStr/Buffers.nvim junegunn/vim-easy-align numToStr/FTerm.nvim mattn/emmet-vim AndrewRadev/tagalong.vim williamboman/mason.nvim williamboman/mason-lspconfig.nvim neovim/nvim-lspconfig hrsh7th/cmp-nvim-lsp jose-elias-alvarez/null-ls.nvim hrsh7th/nvim-cmp L3MON4D3/LuaSnip rafamadriz/friendly-snippets saadparwaiz1/cmp_luasnip hrsh7th/cmp-path hrsh7th/cmp-buffer hrsh7th/cmp-cmdline ray-x/cmp-treesitter windwp/nvim-autopair ndymass/vim-matchup j-hui/fidget.nvim rmagatti/auto-session X winston0410/range-highlight.nvim winston0410/cmd-parser.nvim mg979/vim-visual-multi ray-x/lsp_signature.nvim edolphin-ydf/goimpl.nvim X nvim-lua/popup.nvim X ray-x/go.nvim ray-x/guihua.lua iamcco/markdown-preview.nvim ekickx/clipboard-image.nvim wfxr/minimap.vim lewis6991/gitsigns.nvim rhysd/git-messenger.vim sindrets/diffview.nvim kevinhwang91/nvim-bqf nvim-orgmode/orgmode HiPhish/nvim-ts-rainbow2 otjedi/nvim-rooter.lua catppuccin/nvim X norcalli/nvim-colorizer.lua X ",
+  "wordCount" : "106",
+  "inLanguage": "en",
+  "datePublished": "2023-04-30T18:13:57+08:00",
+  "dateModified": "2023-04-30T18:13:57+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://leifjacky.github.io/posts/neovim/plugins/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "MentosSugus",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://leifjacky.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://leifjacky.github.io/" accesskey="h" title="MentosSugus (Alt + H)">MentosSugus</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      Plugins
+    </h1>
+    <div class="post-meta"><span title='2023-04-30 18:13:57 +0800 CST'>April 30, 2023</span>
+
+</div>
+  </header> 
+  <div class="post-content"><h3 id="wbthomasonpackernvim">wbthomason/packer.nvim<a hidden class="anchor" aria-hidden="true" href="#wbthomasonpackernvim">#</a></h3>
+<p>插件管理器</p>
+<h3 id="nvim-luaplenarynvim">nvim-lua/plenary.nvim<a hidden class="anchor" aria-hidden="true" href="#nvim-luaplenarynvim">#</a></h3>
+<p>其他插件的重要依赖</p>
+<h3 id="ellisonleaogruvboxnvim">ellisonleao/gruvbox.nvim<a hidden class="anchor" aria-hidden="true" href="#ellisonleaogruvboxnvim">#</a></h3>
+<p>gruvbox 主题</p>
+<h3 id="nvim-treenvim-web-devicons">nvim-tree/nvim-web-devicons<a hidden class="anchor" aria-hidden="true" href="#nvim-treenvim-web-devicons">#</a></h3>
+<p>图标</p>
+<h3 id="nvim-lualinelualinenvim">nvim-lualine/lualine.nvim<a hidden class="anchor" aria-hidden="true" href="#nvim-lualinelualinenvim">#</a></h3>
+<p>状态栏</p>
+<h3 id="nvim-treesitternvim-treesitter">nvim-treesitter/nvim-treesitter<a hidden class="anchor" aria-hidden="true" href="#nvim-treesitternvim-treesitter">#</a></h3>
+<p>语法树高亮</p>
+<h3 id="nvim-treesitterplayground">nvim-treesitter/playground<a hidden class="anchor" aria-hidden="true" href="#nvim-treesitterplayground">#</a></h3>
+<p>treesitter 的可视化</p>
+<h3 id="vim-treesitternvim-treesitter-textobjects">vim-treesitter/nvim-treesitter-textobjects<a hidden class="anchor" aria-hidden="true" href="#vim-treesitternvim-treesitter-textobjects">#</a></h3>
+<h3 id="nvim-treesitternvim-treesitter-refactor">nvim-treesitter/nvim-treesitter-refactor<a hidden class="anchor" aria-hidden="true" href="#nvim-treesitternvim-treesitter-refactor">#</a></h3>
+<h3 id="windwpnvim-ts-autotag">windwp/nvim-ts-autotag<a hidden class="anchor" aria-hidden="true" href="#windwpnvim-ts-autotag">#</a></h3>
+<h3 id="joosepalvistenvim-ts-context-commentstring">JoosepAlviste/nvim-ts-context-commentstring<a hidden class="anchor" aria-hidden="true" href="#joosepalvistenvim-ts-context-commentstring">#</a></h3>
+<h3 id="lukas-reinekeindent-blanklinenvim">lukas-reineke/indent-blankline.nvim<a hidden class="anchor" aria-hidden="true" href="#lukas-reinekeindent-blanklinenvim">#</a></h3>
+<h3 id="uga-rosacccnvim">uga-rosa/ccc.nvim<a hidden class="anchor" aria-hidden="true" href="#uga-rosacccnvim">#</a></h3>
+<h3 id="nvim-treenvim-treelua">nvim-tree/nvim-tree.lua<a hidden class="anchor" aria-hidden="true" href="#nvim-treenvim-treelua">#</a></h3>
+<h3 id="vim-telescopetelescopenvim">vim-telescope/telescope.nvim<a hidden class="anchor" aria-hidden="true" href="#vim-telescopetelescopenvim">#</a></h3>
+<h3 id="nvim-telescopetelescope-fzf-nativenvim">nvim-telescope/telescope-fzf-native.nvim<a hidden class="anchor" aria-hidden="true" href="#nvim-telescopetelescope-fzf-nativenvim">#</a></h3>
+<h3 id="nvim-telescopetelescope-symbolsnvim">nvim-telescope/telescope-symbols.nvim<a hidden class="anchor" aria-hidden="true" href="#nvim-telescopetelescope-symbolsnvim">#</a></h3>
+<h3 id="nvim-telescopetelescope-projectnvim-x">nvim-telescope/telescope-project.nvim X<a hidden class="anchor" aria-hidden="true" href="#nvim-telescopetelescope-projectnvim-x">#</a></h3>
+<h3 id="nvim-telescopetelescope-file-browsernvim">nvim-telescope/telescope-file-browser.nvim<a hidden class="anchor" aria-hidden="true" href="#nvim-telescopetelescope-file-browsernvim">#</a></h3>
+<h3 id="nvim-telescopetelescope-media-filesnvim-x">nvim-telescope/telescope-media-files.nvim X<a hidden class="anchor" aria-hidden="true" href="#nvim-telescopetelescope-media-filesnvim-x">#</a></h3>
+<h3 id="dhruvmanilatelescope-bookmarksnvim">dhruvmanila/telescope-bookmarks.nvim<a hidden class="anchor" aria-hidden="true" href="#dhruvmanilatelescope-bookmarksnvim">#</a></h3>
+<h3 id="nvim-telescopetelescope-packernvim">nvim-telescope/telescope-packer.nvim<a hidden class="anchor" aria-hidden="true" href="#nvim-telescopetelescope-packernvim">#</a></h3>
+<h3 id="joseconsecotelescope_sessions_pickernvim-x">JoseConseco/telescope_sessions_picker.nvim X<a hidden class="anchor" aria-hidden="true" href="#joseconsecotelescope_sessions_pickernvim-x">#</a></h3>
+<h3 id="huahuai23telescope-sessionnvim-x">HUAHUAI23/telescope-session.nvim X<a hidden class="anchor" aria-hidden="true" href="#huahuai23telescope-sessionnvim-x">#</a></h3>
+<h3 id="acksldnvim-neocliplua-x">AckslD/nvim-neoclip.lua X<a hidden class="anchor" aria-hidden="true" href="#acksldnvim-neocliplua-x">#</a></h3>
+<h3 id="rmagattisession-lens-x">rmagatti/session-lens X<a hidden class="anchor" aria-hidden="true" href="#rmagattisession-lens-x">#</a></h3>
+<h3 id="rcarriganvim-notify-x">rcarriga/nvim-notify X<a hidden class="anchor" aria-hidden="true" href="#rcarriganvim-notify-x">#</a></h3>
+<h3 id="numtostrnavigatornvim-x">numToStr/Navigator.nvim X<a hidden class="anchor" aria-hidden="true" href="#numtostrnavigatornvim-x">#</a></h3>
+<h3 id="phaazonhopnvim">phaazon/hop.nvim<a hidden class="anchor" aria-hidden="true" href="#phaazonhopnvim">#</a></h3>
+<h3 id="karb94neoscrollnvim-x">karb94/neoscroll.nvim X<a hidden class="anchor" aria-hidden="true" href="#karb94neoscrollnvim-x">#</a></h3>
+<h3 id="folkewhich-keynvim">folke/which-key.nvim<a hidden class="anchor" aria-hidden="true" href="#folkewhich-keynvim">#</a></h3>
+<h3 id="stevearcdressingnvim-x">stevearc/dressing.nvim X<a hidden class="anchor" aria-hidden="true" href="#stevearcdressingnvim-x">#</a></h3>
+<h3 id="mrjones2014legendarynvim-x">mrjones2014/legendary.nvim X<a hidden class="anchor" aria-hidden="true" href="#mrjones2014legendarynvim-x">#</a></h3>
+<h3 id="b3nj5m1nkommentary-x">b3nj5m1n/kommentary X<a hidden class="anchor" aria-hidden="true" href="#b3nj5m1nkommentary-x">#</a></h3>
+<h3 id="numtostrcommentnvim">numToStr/Comment.nvim<a hidden class="anchor" aria-hidden="true" href="#numtostrcommentnvim">#</a></h3>
+<h3 id="tpopevim-surround">tpope/vim-surround<a hidden class="anchor" aria-hidden="true" href="#tpopevim-surround">#</a></h3>
+<h3 id="tpopevim-repeat">tpope/vim-repeat<a hidden class="anchor" aria-hidden="true" href="#tpopevim-repeat">#</a></h3>
+<h3 id="wellletargetsvim">wellle/targets.vim<a hidden class="anchor" aria-hidden="true" href="#wellletargetsvim">#</a></h3>
+<h3 id="numtostrbuffersnvim">numToStr/Buffers.nvim<a hidden class="anchor" aria-hidden="true" href="#numtostrbuffersnvim">#</a></h3>
+<h3 id="junegunnvim-easy-align">junegunn/vim-easy-align<a hidden class="anchor" aria-hidden="true" href="#junegunnvim-easy-align">#</a></h3>
+<h3 id="numtostrftermnvim">numToStr/FTerm.nvim<a hidden class="anchor" aria-hidden="true" href="#numtostrftermnvim">#</a></h3>
+<h3 id="mattnemmet-vim">mattn/emmet-vim<a hidden class="anchor" aria-hidden="true" href="#mattnemmet-vim">#</a></h3>
+<h3 id="andrewradevtagalongvim">AndrewRadev/tagalong.vim<a hidden class="anchor" aria-hidden="true" href="#andrewradevtagalongvim">#</a></h3>
+<h3 id="williambomanmasonnvim">williamboman/mason.nvim<a hidden class="anchor" aria-hidden="true" href="#williambomanmasonnvim">#</a></h3>
+<h3 id="williambomanmason-lspconfignvim">williamboman/mason-lspconfig.nvim<a hidden class="anchor" aria-hidden="true" href="#williambomanmason-lspconfignvim">#</a></h3>
+<h3 id="neovimnvim-lspconfig">neovim/nvim-lspconfig<a hidden class="anchor" aria-hidden="true" href="#neovimnvim-lspconfig">#</a></h3>
+<h3 id="hrsh7thcmp-nvim-lsp">hrsh7th/cmp-nvim-lsp<a hidden class="anchor" aria-hidden="true" href="#hrsh7thcmp-nvim-lsp">#</a></h3>
+<h3 id="jose-elias-alvareznull-lsnvim">jose-elias-alvarez/null-ls.nvim<a hidden class="anchor" aria-hidden="true" href="#jose-elias-alvareznull-lsnvim">#</a></h3>
+<h3 id="hrsh7thnvim-cmp">hrsh7th/nvim-cmp<a hidden class="anchor" aria-hidden="true" href="#hrsh7thnvim-cmp">#</a></h3>
+<h3 id="l3mon4d3luasnip">L3MON4D3/LuaSnip<a hidden class="anchor" aria-hidden="true" href="#l3mon4d3luasnip">#</a></h3>
+<h3 id="rafamadrizfriendly-snippets">rafamadriz/friendly-snippets<a hidden class="anchor" aria-hidden="true" href="#rafamadrizfriendly-snippets">#</a></h3>
+<h3 id="saadparwaiz1cmp_luasnip">saadparwaiz1/cmp_luasnip<a hidden class="anchor" aria-hidden="true" href="#saadparwaiz1cmp_luasnip">#</a></h3>
+<h3 id="hrsh7thcmp-path">hrsh7th/cmp-path<a hidden class="anchor" aria-hidden="true" href="#hrsh7thcmp-path">#</a></h3>
+<h3 id="hrsh7thcmp-buffer">hrsh7th/cmp-buffer<a hidden class="anchor" aria-hidden="true" href="#hrsh7thcmp-buffer">#</a></h3>
+<h3 id="hrsh7thcmp-cmdline">hrsh7th/cmp-cmdline<a hidden class="anchor" aria-hidden="true" href="#hrsh7thcmp-cmdline">#</a></h3>
+<h3 id="ray-xcmp-treesitter">ray-x/cmp-treesitter<a hidden class="anchor" aria-hidden="true" href="#ray-xcmp-treesitter">#</a></h3>
+<h3 id="windwpnvim-autopair">windwp/nvim-autopair<a hidden class="anchor" aria-hidden="true" href="#windwpnvim-autopair">#</a></h3>
+<h3 id="ndymassvim-matchup">ndymass/vim-matchup<a hidden class="anchor" aria-hidden="true" href="#ndymassvim-matchup">#</a></h3>
+<h3 id="j-huifidgetnvim">j-hui/fidget.nvim<a hidden class="anchor" aria-hidden="true" href="#j-huifidgetnvim">#</a></h3>
+<h3 id="rmagattiauto-session-x">rmagatti/auto-session X<a hidden class="anchor" aria-hidden="true" href="#rmagattiauto-session-x">#</a></h3>
+<h3 id="winston0410range-highlightnvim">winston0410/range-highlight.nvim<a hidden class="anchor" aria-hidden="true" href="#winston0410range-highlightnvim">#</a></h3>
+<h3 id="winston0410cmd-parsernvim">winston0410/cmd-parser.nvim<a hidden class="anchor" aria-hidden="true" href="#winston0410cmd-parsernvim">#</a></h3>
+<h3 id="mg979vim-visual-multi">mg979/vim-visual-multi<a hidden class="anchor" aria-hidden="true" href="#mg979vim-visual-multi">#</a></h3>
+<h3 id="ray-xlsp_signaturenvim">ray-x/lsp_signature.nvim<a hidden class="anchor" aria-hidden="true" href="#ray-xlsp_signaturenvim">#</a></h3>
+<h3 id="edolphin-ydfgoimplnvim-x">edolphin-ydf/goimpl.nvim X<a hidden class="anchor" aria-hidden="true" href="#edolphin-ydfgoimplnvim-x">#</a></h3>
+<h3 id="nvim-luapopupnvim-x">nvim-lua/popup.nvim X<a hidden class="anchor" aria-hidden="true" href="#nvim-luapopupnvim-x">#</a></h3>
+<h3 id="ray-xgonvim">ray-x/go.nvim<a hidden class="anchor" aria-hidden="true" href="#ray-xgonvim">#</a></h3>
+<h3 id="ray-xguihualua">ray-x/guihua.lua<a hidden class="anchor" aria-hidden="true" href="#ray-xguihualua">#</a></h3>
+<h3 id="iamccomarkdown-previewnvim">iamcco/markdown-preview.nvim<a hidden class="anchor" aria-hidden="true" href="#iamccomarkdown-previewnvim">#</a></h3>
+<h3 id="ekickxclipboard-imagenvim">ekickx/clipboard-image.nvim<a hidden class="anchor" aria-hidden="true" href="#ekickxclipboard-imagenvim">#</a></h3>
+<h3 id="wfxrminimapvim">wfxr/minimap.vim<a hidden class="anchor" aria-hidden="true" href="#wfxrminimapvim">#</a></h3>
+<h3 id="lewis6991gitsignsnvim">lewis6991/gitsigns.nvim<a hidden class="anchor" aria-hidden="true" href="#lewis6991gitsignsnvim">#</a></h3>
+<h3 id="rhysdgit-messengervim">rhysd/git-messenger.vim<a hidden class="anchor" aria-hidden="true" href="#rhysdgit-messengervim">#</a></h3>
+<h3 id="sindretsdiffviewnvim">sindrets/diffview.nvim<a hidden class="anchor" aria-hidden="true" href="#sindretsdiffviewnvim">#</a></h3>
+<h3 id="kevinhwang91nvim-bqf">kevinhwang91/nvim-bqf<a hidden class="anchor" aria-hidden="true" href="#kevinhwang91nvim-bqf">#</a></h3>
+<h3 id="nvim-orgmodeorgmode">nvim-orgmode/orgmode<a hidden class="anchor" aria-hidden="true" href="#nvim-orgmodeorgmode">#</a></h3>
+<h3 id="hiphishnvim-ts-rainbow2">HiPhish/nvim-ts-rainbow2<a hidden class="anchor" aria-hidden="true" href="#hiphishnvim-ts-rainbow2">#</a></h3>
+<h3 id="otjedinvim-rooterlua">otjedi/nvim-rooter.lua<a hidden class="anchor" aria-hidden="true" href="#otjedinvim-rooterlua">#</a></h3>
+<h3 id="catppuccinnvim-x">catppuccin/nvim X<a hidden class="anchor" aria-hidden="true" href="#catppuccinnvim-x">#</a></h3>
+<h3 id="norcallinvim-colorizerlua-x">norcalli/nvim-colorizer.lua X<a hidden class="anchor" aria-hidden="true" href="#norcallinvim-colorizerlua-x">#</a></h3>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://leifjacky.github.io/">MentosSugus</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

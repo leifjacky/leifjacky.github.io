@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>_Misc on MentosSugus</title>
+    <link>https://leifjacky.github.io/categories/_misc/</link>
+    <description>Recent content in _Misc on MentosSugus</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 09 Apr 2023 01:38:33 +0800</lastBuildDate><atom:link href="https://leifjacky.github.io/categories/_misc/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Good and Bad Products</title>
+      <link>https://leifjacky.github.io/posts/good-and-bad-products/</link>
+      <pubDate>Sun, 09 Apr 2023 01:38:33 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/good-and-bad-products/</guid>
+      <description>分享一些我用过认为好的产品，仅限使用过的，没用过就不好评价了
+Good products Mac Pro 2013 垃圾桶
+Mac Mini 2012
+Lelit bianca V2
+B&amp;amp;W 702 S2, Accuphase C-200X P-300L, AuraLic Altair G1
+Sony KD-65Z9F
+Bad products Macbook 2016 Touchbar 版本
+波妞 388</description>
+    </item>
+    
+    <item>
+      <title>Golang进程崩溃日志</title>
+      <link>https://leifjacky.github.io/posts/golang/process-crash/</link>
+      <pubDate>Sat, 08 Apr 2023 00:23:43 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/golang/process-crash/</guid>
+      <description>export GOTRACEBACK=crash
+或者你把 ./daemon env GOTRACEBACK=crash ./robot_server &amp;ndash;log_dir=${log_dir} &amp;ndash;conf=robotserver.conf &amp;amp; 改写成：env GOTRACEBACK=crash ./daemon ./robot_server &amp;ndash;log_dir=${log_dir} &amp;ndash;conf=robotserver.conf &amp;amp; 也是可以的
+开发服务器程序时如果未经过充分测试， 服务稳定运行一段时间后会突然崩溃退出。一般是因为程序中出现了某个未捕获的异常。 这类问题属于偶现的，且需要服务器运行一段时间之后才会出现，难以定位有问题的代码段。
+这中情况下应该将服务进程的 stderr 重定向至某个文件，这样当进程因未捕获的异常导致崩溃时，go 运行时会将异常发生时各个协程的调用栈信息记录下来，便于定位问题。
+logFile, err := os.OpenFile(&amp;#34;./log/fatal.log&amp;#34;, os.O_CREATE|os.O_APPEND|os.O_RDWR, 0660) if err != nil { log.Println(&amp;#34;服务启动出错&amp;#34;, &amp;#34;打开异常日志文件失败&amp;#34; , err) return } // 将进程标准出错重定向至文件，进程崩溃时运行时将向该文件记录协程调用栈信息 syscall.Dup2(int(logFile.Fd()), int(os.Stderr.Fd())) 以上代码利用了 linux 系统中的 dup 系统调用，用以将某一文件描述符指向一个新的文件。在 windows 系统及 mac 系统下暂时不可用。</description>
+    </item>
+    
+    <item>
+      <title>Ethereum Contract Notes</title>
+      <link>https://leifjacky.github.io/posts/ethereum-contract-notes/</link>
+      <pubDate>Sat, 08 Apr 2023 00:23:00 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/ethereum-contract-notes/</guid>
+      <description>Sodility IDE: https://remix.ethereum.org
+first.sol
+pragma solidity ^0.4.0; contract SimpleStorage { uint storedData; function set(uint x) public { storedData = x; } function get() public constant returns (uint) { return storedData; } } coin.sol
+pragma solidity ^0.4.21; contract Coin { address public minter; mapping (address =&amp;gt; uint) public balances; event Sent(address from, address to, uint amount); constructor() public { minter= msg.sender; } function mint(address receiver, uint amount) public { if (msg.sender !</description>
+    </item>
+    
+    <item>
+      <title>Rust Notes</title>
+      <link>https://leifjacky.github.io/posts/rust-notes/</link>
+      <pubDate>Sat, 08 Apr 2023 00:22:20 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/rust-notes/</guid>
+      <description>let 声明变量，mut 可变变量 let mut x: i8 = 1; let y = 2; 函数声明 fn calc(wf: f64) -&amp;gt; f64 { wf + 127.3 } fn fibonaci(mut n: i8) -&amp;gt; i64 { if n == 1 { return 1; } else if n == 2 { return 2; } let mut last = 2; let mut ret = 3; while n &amp;gt; 3 { let temp = ret; ret += last; last = temp; n -= 1; } return ret; } Rust 中的整型 长度 有符号 无符号 8-bit i8 u8 16-bit i16 u16 32-bit i32 u32 64-bit i64 u64 128-bit i128 u128 arch isize usize Rust 中的整型字面值 数字字面值 例子 Decimal (十进制) 98_222 Hex (十六进制) 0xff Octal (八进制) 0o77 Binary (二进制) 0b1111_0000 Byte (单字节字符)(仅限于 u8) b&amp;rsquo;A&#39; 元组类型 let tup: (i32, f64, u8) = (500, 6.</description>
+    </item>
+    
+    <item>
+      <title>gin使用cache的坑，CachePage与CachePageAtomic的区别</title>
+      <link>https://leifjacky.github.io/posts/gin-cache-problem/</link>
+      <pubDate>Sat, 08 Apr 2023 00:18:53 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/gin-cache-problem/</guid>
+      <description>gin-contrib/cache 官网: https://github.com/gin-contrib/cache
+cache 初体验 最近做项目时候需要使用到 gin 的 cache，后端 http 服务提供 api 时使用缓存是很常见的情景。github 提供的例子里简单的介绍了 cache 组件的使用方法：
+func main() { r := gin.Default() store := persistence.NewInMemoryStore(time.Second) r.GET(&amp;#34;/ping&amp;#34;, func(c *gin.Context) { c.String(200, &amp;#34;pong &amp;#34;+fmt.Sprint(time.Now().Unix())) }) // Cached Page r.GET(&amp;#34;/cache_ping&amp;#34;, cache.CachePage(store, time.Minute, func(c *gin.Context) { c.String(200, &amp;#34;pong &amp;#34;+fmt.Sprint(time.Now().Unix())) })) // Listen and Server in 0.0.0.0:8080 r.Run(&amp;#34;:8080&amp;#34;) } 运行结果：
+$ curl 127.0.0.1:8080/ping pong 1563888434 $ curl 127.0.0.1:8080/ping pong 1563888435 $ curl 127.0.0.1:8080/ping pong 1563888436 $ curl 127.</description>
+    </item>
+    
+    <item>
+      <title>一种golang tcp服务热更新方法</title>
+      <link>https://leifjacky.github.io/posts/golang-tcp-graceful-restart/</link>
+      <pubDate>Sat, 08 Apr 2023 00:17:26 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/golang-tcp-graceful-restart/</guid>
+      <description>参考：
+go-graceful-restart-example </description>
+    </item>
+    
+    <item>
+      <title>一种golang死锁情形</title>
+      <link>https://leifjacky.github.io/posts/golang-dead-lock/</link>
+      <pubDate>Sat, 08 Apr 2023 00:16:03 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/golang-dead-lock/</guid>
+      <description>最近做项目时候碰到了死锁的情况，还原成简单的代码如下：
+package main import ( &amp;#34;fmt&amp;#34; &amp;#34;sync&amp;#34; ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(&amp;#34;dosting start&amp;#34;) // dosth fmt.Println(&amp;#34;dosting end&amp;#34;) } func lock() { fmt.Println(&amp;#34;lock start&amp;#34;) m.Lock() fmt.Println(&amp;#34;lock end&amp;#34;) } func unlock() { fmt.Println(&amp;#34;unlock start&amp;#34;) m.Unlock() fmt.Println(&amp;#34;unlock end&amp;#34;) } 运行结果：
+$ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。</description>
+    </item>
+    
+    <item>
+      <title>Aeternity钱包配置</title>
+      <link>https://leifjacky.github.io/posts/aeternity-wallet-config/</link>
+      <pubDate>Sat, 08 Apr 2023 00:12:54 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/aeternity-wallet-config/</guid>
+      <description>钱包安装 https://github.com/aeternity/aeternity/releases
+下载钱包文件：
+mkdir aeternity &amp;amp;&amp;amp; cd aeternity wget https://github.com/aeternity/aeternity/releases/download/v2.5.0/aeternity-2.5.0-ubuntu-x86_64.tar.gz tar xvf aeternity-2.5.0-ubuntu-x86_64.tar.gz 安装依赖(https://github.com/aeternity/documentation-hub/blob/master/docs/tutorials/run-node-on-ubuntu-1804.md)：
+Libsodium v1.0.16 Openssl 1.0.0 sudo apt-get install build-essential curl -O https://download.libsodium.org/libsodium/releases/libsodium-1.0.16.tar.gz tar -xf libsodium-1.0.16.tar.gz &amp;amp;&amp;amp; cd libsodium-1.0.16 ./configure &amp;amp;&amp;amp; make &amp;amp;&amp;amp; sudo make install &amp;amp;&amp;amp; sudo ldconfig 配置节点：
+写入以下内容 epoch.yaml
+sync: port: 3015 keys: dir: keys peer_password: &amp;#34;secret&amp;#34; http: external: port: 3013 internal: port: 3113 websocket: channel: port: 3014 mining: beneficiary: &amp;#34;beneficiary_pubkey_to_be_replaced&amp;#34; autostart: false chain: persist: true db_path: .</description>
+    </item>
+    
+    <item>
+      <title>最短编辑距离 Golang</title>
+      <link>https://leifjacky.github.io/posts/golang/mindistance-problem/</link>
+      <pubDate>Sat, 08 Apr 2023 00:12:00 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/golang/mindistance-problem/</guid>
+      <description>问题 给定两个字符串 a 和 b，只允许以下三种操作：
+插入一个字符； 删除一个字符； 替换一个字符。 求：把 a 转换成 b 的最小操作次数，也就是所谓的最小编辑距离。
+举例： &amp;ldquo;xy&amp;rdquo; =&amp;gt; &amp;ldquo;xz&amp;rdquo;，只需要把 y 替换成 z，因此，最小编辑距离为 1。 &amp;ldquo;xyz&amp;rdquo; =&amp;gt; &amp;ldquo;xy&amp;rdquo;，只需要删除 z ，因此，最小编辑距离为 1。
+思路 本题与最长公共子序列有相似性。插入和删除其实是逆操作，操作与 ret[i-1][j]与 ret[i][j-1]有关，替换则是与 ret[i-1][j-1]有关。
+代码 package main import &amp;#34;fmt&amp;#34; const ( maxDistance = 0x3fffffff ) type Row []int func MinDistance(str1, str2 string) int { r1, r2 := []rune(str1), []rune(str2) return minDistance(r1, r2) } func minDistance(r1, r2 []rune) int { l1, l2 := len(r1), len(r2) a := genArray(l1, l2) for i := 1; i &amp;lt;= l1; i++ { for j := 1; j &amp;lt;= l2; j++ { if r1[i-1] == r2[j-1] {	// 无需进行操作 a[i][j] = a[i-1][j-1] } else { a[i][j] = min(a[i-1][j-1], min(a[i-1][j], a[i][j-1])) + 1 // 从三种操作中选择最优 } } } return a[l1][l2] } func genArray(l1, l2 int) []Row { a := make([]Row, l1+1) for i := 0; i &amp;lt;= l1; i++ { a[i] = make(Row, l2+1) for j := 0; j &amp;lt;= l2; j++ { a[i][j] = maxDistance if i == 0 || j == 0 { a[i][j] = max(i, j) } } } return a } func max(a, b int) int { if a &amp;gt; b { return a } return b } func min(a, b int) int { if a &amp;lt; b { return a } return b } func main() { a := &amp;#34;spiderman&amp;#34; b := &amp;#34;superman&amp;#34; fmt.</description>
+    </item>
+    
+    <item>
+      <title>tcpdump 使用实例</title>
+      <link>https://leifjacky.github.io/posts/tcpdump-usage/</link>
+      <pubDate>Sat, 08 Apr 2023 00:10:58 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/tcpdump-usage/</guid>
+      <description>tcpdump 参数
+-A 用户友好的方式进行输出 -D, &amp;ndash;list-interfaces 输出可用设备 -i interface, &amp;ndash;interface=interface 监听指定设备 -e 输出 MAC 地址 &amp;ndash;immediate-mode 实时输出，一般不使用 -n 禁止转换地址（etc ip,port）为名称 -#, &amp;ndash;number 在每个包开头添加编号 -Q direction, &amp;ndash;direction=direction 指定捕捉方向 in, out, inout -q 安静模式，输出少量协议信息 -s snaplen, &amp;ndash;snapshot-length=snaplen 只截取报文前snaplen个字节内容 -tt 输出 timestamp 格式 以下指令监听eth0网卡，目标地址为192.168.2.10，源地址处于192.168网段，数据包长度范围在160~200之间的数据包。数据以安静模式输出，转换为易读的字符串，不对 ip 做反向 dns 操作，只筛选方向为流入的数据，时间以timestamp显示。
+tcpdump -i eth0 &amp;#39;tcp and dst host 192.168.2.10 and src net 192.168 and len &amp;gt; 160 and len &amp;lt; 200&amp;#39; -q -A -n -Q in -tt 参考资料：</description>
+    </item>
+    
+    <item>
+      <title>python3 基本数据类型</title>
+      <link>https://leifjacky.github.io/posts/python3-datatype/</link>
+      <pubDate>Sat, 08 Apr 2023 00:10:00 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/python3-datatype/</guid>
+      <description># python3 基本数据类型 counter = 100 # 整型变量 miles = 1000.0 # 浮点型变量 name = &amp;#34;runoob&amp;#34; # 字符串 print(counter) print(miles) print(name) # 多变量赋值 a = b = c = 1 x, y, z = 1, 2, &amp;#34;runoob&amp;#34; # 数字类型int, float, bool, complex a, b, c, d = 20, 5.5, True, 4 + 3j print(type(a), type(b), type(c), type(d)) print(isinstance(a, int)) # isinstance 和 type 的区别 class A: pass class B(A): pass print(isinstance(A(), A)) # returns True print(type(A()) == A) # returns True print(isinstance(B(), A)) # returns True print(type(B()) == A) # returns False # type()不会认为子类是一种父类类型。 # isinstance()会认为子类是一种父类类型。 del a del x, y # 数值运算 print(5 + 4, 4.</description>
+    </item>
+    
+    <item>
+      <title>python3基础语法</title>
+      <link>https://leifjacky.github.io/posts/python3-grammar/</link>
+      <pubDate>Sat, 08 Apr 2023 00:08:52 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/python3-grammar/</guid>
+      <description># 基础语法 import keyword print(keyword.kwlist) # 注释 print(&amp;#34;Hello, Python!&amp;#34;) &amp;#39;&amp;#39;&amp;#39; 多行注释1 多行注释1 &amp;#39;&amp;#39;&amp;#39; &amp;#34;&amp;#34;&amp;#34; 多行注释2 多行注释2 &amp;#34;&amp;#34;&amp;#34; # 缩进 flag = 0 if flag == 0: print(&amp;#34;Answer&amp;#34;) print(&amp;#34;True&amp;#34;) else: print(&amp;#34;Answer&amp;#34;) print(&amp;#34;False&amp;#34;) # 多行 a = b = c = 1 total = a + \ b + \ c x = &amp;#34;a&amp;#34; y = &amp;#34;b&amp;#34; # 换行输出 print(x) print(y) print(&amp;#39;---------&amp;#39;) # 不换行输出 print(x, end=&amp;#34; &amp;#34;) print(y, end=&amp;#34; &amp;#34;) print() # import与from.</description>
+    </item>
+    
+    <item>
+      <title>ubuntu 16.04 安装配置haproxy</title>
+      <link>https://leifjacky.github.io/posts/ubuntu-1604-haproxy/</link>
+      <pubDate>Sat, 08 Apr 2023 00:06:21 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/ubuntu-1604-haproxy/</guid>
+      <description>haproxy 是一款负载均衡软件，可以实现 TCP 和 HTTP 模式下的流量代理转发。
+1.在官网下载源码
+wget http://www.haproxy.org/download/1.8/src/haproxy-1.8.1.tar.gz 2.解压
+tar xvf haproxy-1.8.1.tar.gz 3.查看 README 文件，haproxy 支持以下系统的编译，在这里需要选择合适的版本参数。在这里我使用 linux2628
+To build haproxy, you have to choose your target OS amongst the following ones and assign it to the TARGET variable : - linux22 for Linux 2.2 - linux24 for Linux 2.4 and above (default) - linux24e for Linux 2.4 with support for a working epoll (&amp;gt; 0.21) - linux26 for Linux 2.</description>
+    </item>
+    
+    <item>
+      <title>ubuntu 16.04 搭建shadowsocks服务器</title>
+      <link>https://leifjacky.github.io/posts/ubuntu-1604-shadowsocks/</link>
+      <pubDate>Sat, 08 Apr 2023 00:04:53 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/ubuntu-1604-shadowsocks/</guid>
+      <description>Shadowsocks 优势在于能够同时为 Win、Mac、iOS、Android 等设备同时提供服务，使用 sock5 进行代理，相较于 VPN 稳定高效。
+安装 ss 环境，需要先安装pip：
+apt install -y python-gevent python-pip pip install --upgrade pip pip install setuptools pip install shadowsocks 写入配置文件/etc/shadowsocks.json：
+echo &amp;#39;{ &amp;#34;server&amp;#34;:&amp;#34;0.0.0.0&amp;#34;, &amp;#34;local_address&amp;#34;: &amp;#34;127.0.0.1&amp;#34;, &amp;#34;local_port&amp;#34;:1080, &amp;#34;port_password&amp;#34;: { &amp;#34;18080&amp;#34;: &amp;#34;password&amp;#34; }, &amp;#34;timeout&amp;#34;:300, &amp;#34;method&amp;#34;:&amp;#34;rc4-md5&amp;#34;, &amp;#34;fast_open&amp;#34;: false }&amp;#39; &amp;gt; /etc/shadowsocks.json 启动服务
+ssserver -c /etc/shadowsocks.json -d start 配置开机自动启动：
+echo &amp;#39;#!/bin/sh -e ssserver -c /etc/shadowsocks.json -d start exit 0&amp;#39; &amp;gt; /etc/rc.local 参考资料：
+官网：https://shadowsocks.org/ github 主页：https://github.com/shadowsocks </description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>gin使用cache的坑，CachePage与CachePageAtomic的区别 | MentosSugus</title>
+<meta name="keywords" content="">
+<meta name="description" content="gin-contrib/cache 官网: https://github.com/gin-contrib/cache
+cache 初体验 最近做项目时候需要使用到 gin 的 cache，后端 http 服务提供 api 时使用缓存是很常见的情景。github 提供的例子里简单的介绍了 cache 组件的使用方法：
+func main() { r := gin.Default() store := persistence.NewInMemoryStore(time.Second) r.GET(&#34;/ping&#34;, func(c *gin.Context) { c.String(200, &#34;pong &#34;&#43;fmt.Sprint(time.Now().Unix())) }) // Cached Page r.GET(&#34;/cache_ping&#34;, cache.CachePage(store, time.Minute, func(c *gin.Context) { c.String(200, &#34;pong &#34;&#43;fmt.Sprint(time.Now().Unix())) })) // Listen and Server in 0.0.0.0:8080 r.Run(&#34;:8080&#34;) } 运行结果：
+$ curl 127.0.0.1:8080/ping pong 1563888434 $ curl 127.0.0.1:8080/ping pong 1563888435 $ curl 127.0.0.1:8080/ping pong 1563888436 $ curl 127.">
+<meta name="author" content="">
+<link rel="canonical" href="https://leifjacky.github.io/posts/gin-cache-problem/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.5cfc680b1eeaeef9efbced92d46c2a9e876b72ee14fba85846afc4cff9e6e6f8.css" integrity="sha256-XPxoCx7q7vnvvO2S1Gwqnodrcu4U&#43;6hYRq/Ez/nm5vg=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://leifjacky.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://leifjacky.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://leifjacky.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://leifjacky.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://leifjacky.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="gin使用cache的坑，CachePage与CachePageAtomic的区别" />
+<meta property="og:description" content="gin-contrib/cache 官网: https://github.com/gin-contrib/cache
+cache 初体验 最近做项目时候需要使用到 gin 的 cache，后端 http 服务提供 api 时使用缓存是很常见的情景。github 提供的例子里简单的介绍了 cache 组件的使用方法：
+func main() { r := gin.Default() store := persistence.NewInMemoryStore(time.Second) r.GET(&#34;/ping&#34;, func(c *gin.Context) { c.String(200, &#34;pong &#34;&#43;fmt.Sprint(time.Now().Unix())) }) // Cached Page r.GET(&#34;/cache_ping&#34;, cache.CachePage(store, time.Minute, func(c *gin.Context) { c.String(200, &#34;pong &#34;&#43;fmt.Sprint(time.Now().Unix())) })) // Listen and Server in 0.0.0.0:8080 r.Run(&#34;:8080&#34;) } 运行结果：
+$ curl 127.0.0.1:8080/ping pong 1563888434 $ curl 127.0.0.1:8080/ping pong 1563888435 $ curl 127.0.0.1:8080/ping pong 1563888436 $ curl 127." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://leifjacky.github.io/posts/gin-cache-problem/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-04-08T00:18:53+08:00" />
+<meta property="article:modified_time" content="2023-04-08T00:18:53+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="gin使用cache的坑，CachePage与CachePageAtomic的区别"/>
+<meta name="twitter:description" content="gin-contrib/cache 官网: https://github.com/gin-contrib/cache
+cache 初体验 最近做项目时候需要使用到 gin 的 cache，后端 http 服务提供 api 时使用缓存是很常见的情景。github 提供的例子里简单的介绍了 cache 组件的使用方法：
+func main() { r := gin.Default() store := persistence.NewInMemoryStore(time.Second) r.GET(&#34;/ping&#34;, func(c *gin.Context) { c.String(200, &#34;pong &#34;&#43;fmt.Sprint(time.Now().Unix())) }) // Cached Page r.GET(&#34;/cache_ping&#34;, cache.CachePage(store, time.Minute, func(c *gin.Context) { c.String(200, &#34;pong &#34;&#43;fmt.Sprint(time.Now().Unix())) })) // Listen and Server in 0.0.0.0:8080 r.Run(&#34;:8080&#34;) } 运行结果：
+$ curl 127.0.0.1:8080/ping pong 1563888434 $ curl 127.0.0.1:8080/ping pong 1563888435 $ curl 127.0.0.1:8080/ping pong 1563888436 $ curl 127."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Posts",
+      "item": "https://leifjacky.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "gin使用cache的坑，CachePage与CachePageAtomic的区别",
+      "item": "https://leifjacky.github.io/posts/gin-cache-problem/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "gin使用cache的坑，CachePage与CachePageAtomic的区别",
+  "name": "gin使用cache的坑，CachePage与CachePageAtomic的区别",
+  "description": "gin-contrib/cache 官网: https://github.com/gin-contrib/cache\ncache 初体验 最近做项目时候需要使用到 gin 的 cache，后端 http 服务提供 api 时使用缓存是很常见的情景。github 提供的例子里简单的介绍了 cache 组件的使用方法：\nfunc main() { r := gin.Default() store := persistence.NewInMemoryStore(time.Second) r.GET(\u0026#34;/ping\u0026#34;, func(c *gin.Context) { c.String(200, \u0026#34;pong \u0026#34;+fmt.Sprint(time.Now().Unix())) }) // Cached Page r.GET(\u0026#34;/cache_ping\u0026#34;, cache.CachePage(store, time.Minute, func(c *gin.Context) { c.String(200, \u0026#34;pong \u0026#34;+fmt.Sprint(time.Now().Unix())) })) // Listen and Server in 0.0.0.0:8080 r.Run(\u0026#34;:8080\u0026#34;) } 运行结果：\n$ curl 127.0.0.1:8080/ping pong 1563888434 $ curl 127.0.0.1:8080/ping pong 1563888435 $ curl 127.0.0.1:8080/ping pong 1563888436 $ curl 127.",
+  "keywords": [
+    
+  ],
+  "articleBody": " gin-contrib/cache 官网: https://github.com/gin-contrib/cache\ncache 初体验 最近做项目时候需要使用到 gin 的 cache，后端 http 服务提供 api 时使用缓存是很常见的情景。github 提供的例子里简单的介绍了 cache 组件的使用方法：\nfunc main() { r := gin.Default() store := persistence.NewInMemoryStore(time.Second) r.GET(\"/ping\", func(c *gin.Context) { c.String(200, \"pong \"+fmt.Sprint(time.Now().Unix())) }) // Cached Page r.GET(\"/cache_ping\", cache.CachePage(store, time.Minute, func(c *gin.Context) { c.String(200, \"pong \"+fmt.Sprint(time.Now().Unix())) })) // Listen and Server in 0.0.0.0:8080 r.Run(\":8080\") } 运行结果：\n$ curl 127.0.0.1:8080/ping pong 1563888434 $ curl 127.0.0.1:8080/ping pong 1563888435 $ curl 127.0.0.1:8080/ping pong 1563888436 $ curl 127.0.0.1:8080/cache_ping pong 1563888465 $ curl 127.0.0.1:8080/cache_ping pong 1563888465 $ curl 127.0.0.1:8080/cache_ping pong 1563888465 可以看到执行 cache_ping 请求时，缓存已经生效。\n实际应用场景分析 实际应用场景下还需要注意更多的地方，将程序稍作调整，加长处理请求的时间。\nr.GET(\"/cache_ping\", cache.CachePage(store, time.Minute, func(c *gin.Context) { time.Sleep(5 * time.Second) c.String(200, \"pong \"+fmt.Sprint(time.Now().Unix())) })) 发起 3 次请求，每次请求间隔 1s 左右。\n客户端日志。\n$ curl 127.0.0.1:8080/cache_ping pong 1563898681 $ curl 127.0.0.1:8080/cache_ping pong 1563898682 $ curl 127.0.0.1:8080/cache_ping pong 1563898683 服务端日志。\n[GIN-debug] Listening and serving HTTP on :8080 [GIN] 2019/07/24 - 00:18:01 | 200 | 5.010318785s | 127.0.0.1 | GET /cache_ping [GIN] 2019/07/24 - 00:18:02 | 200 | 5.0063969s | 127.0.0.1 | GET /cache_ping [GIN] 2019/07/24 - 00:18:03 | 200 | 5.007282647s | 127.0.0.1 | GET /cache_ping 可以看到 3 次请求都没有使用到缓存。意味着在某些情况下，服务器可能需要使用更多的资源去并发执行 api 操作，这也许不是我们想要的。比如某些情况下 api 操作本来耗时较长，并发执行带来的不仅仅是资源的消耗增加，也会影响时间效率。\nCachePageAtomic 查阅文档时发现，除了 CachePage 这一种缓存方式，还有 CachePageAtomic 这种方式。顾名思义就是当前模式下的请求处理会按照原子性操作进行缓存，即请求会发生阻塞，但这样可能会带来另一个问题，并发性能大大下降。\n在程序中加入以下代码：\nr.GET(\"/cache_ping_atomic\", cache.CachePageAtomic(store, time.Minute, func(c *gin.Context) { time.Sleep(5 * time.Second) c.String(200, \"pong \"+fmt.Sprint(time.Now().Unix())) })) 同样发起 3 次请求，每次请求间隔 1s 左右。\n客户端日志。\n$ curl 127.0.0.1:8080/cache_ping pong 1563899657 $ curl 127.0.0.1:8080/cache_ping pong 1563899657 $ curl 127.0.0.1:8080/cache_ping pong 1563899657 服务端日志。\n[GIN-debug] Listening and serving HTTP on :8080 [GIN] 2019/07/24 - 00:34:17 | 200 | 5.006461492s | 127.0.0.1 | GET /cache_ping_atomic [GIN] 2019/07/24 - 00:34:17 | 200 | 4.033627673s | 127.0.0.1 | GET /cache_ping_atomic [GIN] 2019/07/24 - 00:34:17 | 200 | 3.064078263s | 127.0.0.1 | GET /cache_ping_atomic 观察结果和请求时间，除了第一次请求没有使用缓存，后面两次都使用到了。说明缓存已经发挥到了作用。\n前面说到可能会带来并发性能的下降，是在特定的场景下会出现，与 cache 的实现有关。\ncache 源码分析 首先看 CachePage。\n// CachePage Decorator func CachePage(store persistence.CacheStore, expire time.Duration, handle gin.HandlerFunc) gin.HandlerFunc { return func(c *gin.Context) { var cache responseCache url := c.Request.URL key := CreateKey(url.RequestURI()) if err := store.Get(key, \u0026cache); err != nil { if err != persistence.ErrCacheMiss { log.Println(err.Error()) } // replace writer writer := newCachedWriter(store, expire, c.Writer, key) c.Writer = writer handle(c) // Drop caches of aborted contexts if c.IsAborted() { store.Delete(key) } } else { c.Writer.WriteHeader(cache.Status) for k, vals := range cache.Header { for _, v := range vals { c.Writer.Header().Set(k, v) } } c.Writer.Write(cache.Data) } } } CreateKey 会先把 url 做 hash 运算，然后判断键值是否存在，存在就读取缓存，否则更新。这部分没什么问题。\n接下来是 CachePageAtomic。\n// CachePageAtomic Decorator func CachePageAtomic(store persistence.CacheStore, expire time.Duration, handle gin.HandlerFunc) gin.HandlerFunc { var m sync.Mutex p := CachePage(store, expire, handle) return func(c *gin.Context) { m.Lock() defer m.Unlock() p(c) } } CachePageAtomic 是通过在 CachePage 外层加互斥锁实现的。初看似乎没什么问题，但结合 CachePage 的源码看，在某些场景下还是有问题的，比如以下代码。\nr.GET(\"/cache_hello/:name\", cache.CachePage(store, time.Minute, func(c *gin.Context) { time.Sleep(5 * time.Second) c.String(200, \"hello \"+c.Param(\"name\")+fmt.Sprint(time.Now().Unix())) })) r.GET(\"/cache_hello_atomic/:name\", cache.CachePageAtomic(store, time.Minute, func(c *gin.Context) { time.Sleep(5 * time.Second) c.String(200, \"hello \"+c.Param(\"name\")+fmt.Sprint(time.Now().Unix())) })) 我们先看 cache_hello 运行结果。\n客户端结果：\n$ curl 127.0.0.1:8080/cache_hello/tom hello tom1563986675 $ curl 127.0.0.1:8080/cache_hello/jack hello jack1563986675 $ curl 127.0.0.1:8080/cache_hello/sam hello sam1563986676 服务端结果：\n[GIN-debug] Listening and serving HTTP on :8080 [GIN] 2019/07/25 - 00:44:35 | 200 | 5.007968563s | 127.0.0.1 | GET /cache_hello/tom [GIN] 2019/07/25 - 00:44:35 | 200 | 5.007213901s | 127.0.0.1 | GET /cache_hello/jack [GIN] 2019/07/25 - 00:44:36 | 200 | 5.009622944s | 127.0.0.1 | GET /cache_hello/sam 这里我们不关心程序是否使用了缓存，只看运行时间，3 个请求都消耗了 5s，并且并发执行。\n然后看 cache_hello_atomic 的运行结果。\n客户端结果：\n$ curl 127.0.0.1:8080/cache_hello_atomic/tom hello tom1563986831 $ curl 127.0.0.1:8080/cache_hello_atomic/jack hello jack1563986836 $ curl 127.0.0.1:8080/cache_hello_atomic/sam hello sam1563986841 服务端结果：\n[GIN] 2019/07/25 - 00:47:11 | 200 | 5.010191486s | 127.0.0.1 | GET /cache_hello_atomic/tom [GIN] 2019/07/25 - 00:47:16 | 200 | 9.143533318s | 127.0.0.1 | GET /cache_hello_atomic/jack [GIN] 2019/07/25 - 00:47:21 | 200 | 12.983593219s | 127.0.0.1 | GET /cache_hello_atomic/sam 这里已经看出了问题了，由于/cache_hello_atomic/:name 所有的请求都通过同一个 Handler 处理，只使用同一个信号量，他们实际执行过程中是阻塞的。在实际使用场景中，如果存在高并发的接口调用情形而且路由带有参数，需要谨慎考虑使用 CachePageAtomic。\n我们最终目的是为了将原子性操作控制到每一条具体的 url，只能通过自行编写中间件来实现了。\n",
+  "wordCount" : "570",
+  "inLanguage": "en",
+  "datePublished": "2023-04-08T00:18:53+08:00",
+  "dateModified": "2023-04-08T00:18:53+08:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://leifjacky.github.io/posts/gin-cache-problem/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "MentosSugus",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://leifjacky.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://leifjacky.github.io/" accesskey="h" title="MentosSugus (Alt + H)">MentosSugus</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    
+    <h1 class="post-title">
+      gin使用cache的坑，CachePage与CachePageAtomic的区别
+    </h1>
+    <div class="post-meta"><span title='2023-04-08 00:18:53 +0800 CST'>April 8, 2023</span>
+
+</div>
+  </header> 
+  <div class="post-content"><blockquote>
+<p>gin-contrib/cache 官网: <a href="https://github.com/gin-contrib/cache">https://github.com/gin-contrib/cache</a></p>
+</blockquote>
+<h3 id="cache-初体验">cache 初体验<a hidden class="anchor" aria-hidden="true" href="#cache-初体验">#</a></h3>
+<p>最近做项目时候需要使用到 gin 的 cache，后端 http 服务提供 api 时使用缓存是很常见的情景。github 提供的例子里简单的介绍了 cache 组件的使用方法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">main</span>() {
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">r</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Default</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">store</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">persistence</span>.<span style="color:#a6e22e">NewInMemoryStore</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/ping&#34;</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">String</span>(<span style="color:#ae81ff">200</span>, <span style="color:#e6db74">&#34;pong &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprint</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Unix</span>()))
+</span></span><span style="display:flex;"><span>	})
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Cached Page
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/cache_ping&#34;</span>, <span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">CachePage</span>(<span style="color:#a6e22e">store</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Minute</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">String</span>(<span style="color:#ae81ff">200</span>, <span style="color:#e6db74">&#34;pong &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprint</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Unix</span>()))
+</span></span><span style="display:flex;"><span>	}))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Listen and Server in 0.0.0.0:8080
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">Run</span>(<span style="color:#e6db74">&#34;:8080&#34;</span>)
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>运行结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl 127.0.0.1:8080/ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563888434</span>
+</span></span><span style="display:flex;"><span>$ curl 127.0.0.1:8080/ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563888435</span>
+</span></span><span style="display:flex;"><span>$ curl 127.0.0.1:8080/ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563888436</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563888465</span>
+</span></span><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563888465</span>
+</span></span><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563888465</span>
+</span></span></code></pre></div><p>可以看到执行 cache_ping 请求时，缓存已经生效。</p>
+<h3 id="实际应用场景分析">实际应用场景分析<a hidden class="anchor" aria-hidden="true" href="#实际应用场景分析">#</a></h3>
+<p>实际应用场景下还需要注意更多的地方，将程序稍作调整，加长处理请求的时间。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/cache_ping&#34;</span>, <span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">CachePage</span>(<span style="color:#a6e22e">store</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Minute</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">String</span>(<span style="color:#ae81ff">200</span>, <span style="color:#e6db74">&#34;pong &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprint</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Unix</span>()))
+</span></span><span style="display:flex;"><span>}))
+</span></span></code></pre></div><p>发起 3 次请求，每次请求间隔 1s 左右。</p>
+<p>客户端日志。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563898681</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563898682</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563898683</span>
+</span></span></code></pre></div><p>服务端日志。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN-debug<span style="color:#f92672">]</span> Listening and serving HTTP on :8080
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/24 - 00:18:01 | <span style="color:#ae81ff">200</span> |  5.010318785s |       127.0.0.1 | GET      /cache_ping
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/24 - 00:18:02 | <span style="color:#ae81ff">200</span> |    5.0063969s |       127.0.0.1 | GET      /cache_ping
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/24 - 00:18:03 | <span style="color:#ae81ff">200</span> |  5.007282647s |       127.0.0.1 | GET      /cache_ping
+</span></span></code></pre></div><p>可以看到 3 次请求都没有使用到缓存。意味着在某些情况下，服务器可能需要使用更多的资源去并发执行 api 操作，这也许不是我们想要的。比如某些情况下 api 操作本来耗时较长，并发执行带来的不仅仅是资源的消耗增加，也会影响时间效率。</p>
+<h3 id="cachepageatomic">CachePageAtomic<a hidden class="anchor" aria-hidden="true" href="#cachepageatomic">#</a></h3>
+<p>查阅文档时发现，除了 CachePage 这一种缓存方式，还有 CachePageAtomic 这种方式。顾名思义就是当前模式下的请求处理会按照原子性操作进行缓存，即请求会发生阻塞，但这样可能会带来另一个问题，并发性能大大下降。</p>
+<p>在程序中加入以下代码：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/cache_ping_atomic&#34;</span>, <span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">CachePageAtomic</span>(<span style="color:#a6e22e">store</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Minute</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">String</span>(<span style="color:#ae81ff">200</span>, <span style="color:#e6db74">&#34;pong &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprint</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Unix</span>()))
+</span></span><span style="display:flex;"><span>}))
+</span></span></code></pre></div><p>同样发起 3 次请求，每次请求间隔 1s 左右。</p>
+<p>客户端日志。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563899657</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563899657</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_ping
+</span></span><span style="display:flex;"><span>pong <span style="color:#ae81ff">1563899657</span>
+</span></span></code></pre></div><p>服务端日志。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN-debug<span style="color:#f92672">]</span> Listening and serving HTTP on :8080
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/24 - 00:34:17 | <span style="color:#ae81ff">200</span> |  5.006461492s |       127.0.0.1 | GET      /cache_ping_atomic
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/24 - 00:34:17 | <span style="color:#ae81ff">200</span> |  4.033627673s |       127.0.0.1 | GET      /cache_ping_atomic
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/24 - 00:34:17 | <span style="color:#ae81ff">200</span> |  3.064078263s |       127.0.0.1 | GET      /cache_ping_atomic
+</span></span></code></pre></div><p>观察结果和请求时间，除了第一次请求没有使用缓存，后面两次都使用到了。说明缓存已经发挥到了作用。</p>
+<p>前面说到可能会带来并发性能的下降，是在特定的场景下会出现，与 cache 的实现有关。</p>
+<h3 id="cache-源码分析">cache 源码分析<a hidden class="anchor" aria-hidden="true" href="#cache-源码分析">#</a></h3>
+<p>首先看 CachePage。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// CachePage Decorator
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CachePage</span>(<span style="color:#a6e22e">store</span> <span style="color:#a6e22e">persistence</span>.<span style="color:#a6e22e">CacheStore</span>, <span style="color:#a6e22e">expire</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>, <span style="color:#a6e22e">handle</span> <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">HandlerFunc</span>) <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">HandlerFunc</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">cache</span> <span style="color:#a6e22e">responseCache</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">url</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Request</span>.<span style="color:#a6e22e">URL</span>
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">key</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">CreateKey</span>(<span style="color:#a6e22e">url</span>.<span style="color:#a6e22e">RequestURI</span>())
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">store</span>.<span style="color:#a6e22e">Get</span>(<span style="color:#a6e22e">key</span>, <span style="color:#f92672">&amp;</span><span style="color:#a6e22e">cache</span>); <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#a6e22e">persistence</span>.<span style="color:#a6e22e">ErrCacheMiss</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">log</span>.<span style="color:#a6e22e">Println</span>(<span style="color:#a6e22e">err</span>.<span style="color:#a6e22e">Error</span>())
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// replace writer
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">writer</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">newCachedWriter</span>(<span style="color:#a6e22e">store</span>, <span style="color:#a6e22e">expire</span>, <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Writer</span>, <span style="color:#a6e22e">key</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Writer</span> = <span style="color:#a6e22e">writer</span>
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">handle</span>(<span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// Drop caches of aborted contexts
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">IsAborted</span>() {
+</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">store</span>.<span style="color:#a6e22e">Delete</span>(<span style="color:#a6e22e">key</span>)
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>		} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Writer</span>.<span style="color:#a6e22e">WriteHeader</span>(<span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">Status</span>)
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">k</span>, <span style="color:#a6e22e">vals</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">Header</span> {
+</span></span><span style="display:flex;"><span>				<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">v</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">vals</span> {
+</span></span><span style="display:flex;"><span>					<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Writer</span>.<span style="color:#a6e22e">Header</span>().<span style="color:#a6e22e">Set</span>(<span style="color:#a6e22e">k</span>, <span style="color:#a6e22e">v</span>)
+</span></span><span style="display:flex;"><span>				}
+</span></span><span style="display:flex;"><span>			}
+</span></span><span style="display:flex;"><span>			<span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Writer</span>.<span style="color:#a6e22e">Write</span>(<span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">Data</span>)
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>CreateKey 会先把 url 做 hash 运算，然后判断键值是否存在，存在就读取缓存，否则更新。这部分没什么问题。</p>
+<p>接下来是 CachePageAtomic。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#75715e">// CachePageAtomic Decorator
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">CachePageAtomic</span>(<span style="color:#a6e22e">store</span> <span style="color:#a6e22e">persistence</span>.<span style="color:#a6e22e">CacheStore</span>, <span style="color:#a6e22e">expire</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Duration</span>, <span style="color:#a6e22e">handle</span> <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">HandlerFunc</span>) <span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">HandlerFunc</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">m</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Mutex</span>
+</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">p</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">CachePage</span>(<span style="color:#a6e22e">store</span>, <span style="color:#a6e22e">expire</span>, <span style="color:#a6e22e">handle</span>)
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Lock</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">m</span>.<span style="color:#a6e22e">Unlock</span>()
+</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">p</span>(<span style="color:#a6e22e">c</span>)
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>CachePageAtomic 是通过在 CachePage 外层加互斥锁实现的。初看似乎没什么问题，但结合 CachePage 的源码看，在某些场景下还是有问题的，比如以下代码。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/cache_hello/:name&#34;</span>, <span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">CachePage</span>(<span style="color:#a6e22e">store</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Minute</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">String</span>(<span style="color:#ae81ff">200</span>, <span style="color:#e6db74">&#34;hello &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Param</span>(<span style="color:#e6db74">&#34;name&#34;</span>)<span style="color:#f92672">+</span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprint</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Unix</span>()))
+</span></span><span style="display:flex;"><span>}))
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">r</span>.<span style="color:#a6e22e">GET</span>(<span style="color:#e6db74">&#34;/cache_hello_atomic/:name&#34;</span>, <span style="color:#a6e22e">cache</span>.<span style="color:#a6e22e">CachePageAtomic</span>(<span style="color:#a6e22e">store</span>, <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Minute</span>, <span style="color:#66d9ef">func</span>(<span style="color:#a6e22e">c</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">gin</span>.<span style="color:#a6e22e">Context</span>) {
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Sleep</span>(<span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Second</span>)
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">String</span>(<span style="color:#ae81ff">200</span>, <span style="color:#e6db74">&#34;hello &#34;</span><span style="color:#f92672">+</span><span style="color:#a6e22e">c</span>.<span style="color:#a6e22e">Param</span>(<span style="color:#e6db74">&#34;name&#34;</span>)<span style="color:#f92672">+</span><span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Sprint</span>(<span style="color:#a6e22e">time</span>.<span style="color:#a6e22e">Now</span>().<span style="color:#a6e22e">Unix</span>()))
+</span></span><span style="display:flex;"><span>}))
+</span></span></code></pre></div><p>我们先看 cache_hello 运行结果。</p>
+<p>客户端结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_hello/tom
+</span></span><span style="display:flex;"><span>hello tom1563986675
+</span></span><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_hello/jack
+</span></span><span style="display:flex;"><span>hello jack1563986675
+</span></span><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_hello/sam
+</span></span><span style="display:flex;"><span>hello sam1563986676
+</span></span></code></pre></div><p>服务端结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN-debug<span style="color:#f92672">]</span> Listening and serving HTTP on :8080
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/25 - 00:44:35 | <span style="color:#ae81ff">200</span> |  5.007968563s |       127.0.0.1 | GET      /cache_hello/tom
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/25 - 00:44:35 | <span style="color:#ae81ff">200</span> |  5.007213901s |       127.0.0.1 | GET      /cache_hello/jack
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/25 - 00:44:36 | <span style="color:#ae81ff">200</span> |  5.009622944s |       127.0.0.1 | GET      /cache_hello/sam
+</span></span></code></pre></div><p>这里我们不关心程序是否使用了缓存，只看运行时间，3 个请求都消耗了 5s，并且并发执行。</p>
+<p>然后看 cache_hello_atomic 的运行结果。</p>
+<p>客户端结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_hello_atomic/tom
+</span></span><span style="display:flex;"><span>hello tom1563986831
+</span></span><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_hello_atomic/jack
+</span></span><span style="display:flex;"><span>hello jack1563986836
+</span></span><span style="display:flex;"><span>$ curl 127.0.0.1:8080/cache_hello_atomic/sam
+</span></span><span style="display:flex;"><span>hello sam1563986841
+</span></span></code></pre></div><p>服务端结果：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/25 - 00:47:11 | <span style="color:#ae81ff">200</span> |  5.010191486s |       127.0.0.1 | GET      /cache_hello_atomic/tom
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/25 - 00:47:16 | <span style="color:#ae81ff">200</span> |  9.143533318s |       127.0.0.1 | GET      /cache_hello_atomic/jack
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>GIN<span style="color:#f92672">]</span> 2019/07/25 - 00:47:21 | <span style="color:#ae81ff">200</span> | 12.983593219s |       127.0.0.1 | GET      /cache_hello_atomic/sam
+</span></span></code></pre></div><p>这里已经看出了问题了，由于/cache_hello_atomic/:name 所有的请求都通过同一个 Handler 处理，只使用同一个信号量，他们实际执行过程中是阻塞的。在实际使用场景中，如果存在高并发的接口调用情形而且路由带有参数，需要谨慎考虑使用 CachePageAtomic。</p>
+<p>我们最终目的是为了将原子性操作控制到每一条具体的 url，只能通过自行编写中间件来实现了。</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="https://leifjacky.github.io/">MentosSugus</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>

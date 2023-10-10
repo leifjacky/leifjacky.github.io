@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Neovim on MentosSugus</title>
+    <link>https://leifjacky.github.io/categories/neovim/</link>
+    <description>Recent content in Neovim on MentosSugus</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 30 Apr 2023 18:13:57 +0800</lastBuildDate><atom:link href="https://leifjacky.github.io/categories/neovim/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Plugins</title>
+      <link>https://leifjacky.github.io/posts/neovim/plugins/</link>
+      <pubDate>Sun, 30 Apr 2023 18:13:57 +0800</pubDate>
+      
+      <guid>https://leifjacky.github.io/posts/neovim/plugins/</guid>
+      <description>wbthomason/packer.nvim 插件管理器
+nvim-lua/plenary.nvim 其他插件的重要依赖
+ellisonleao/gruvbox.nvim gruvbox 主题
+nvim-tree/nvim-web-devicons 图标
+nvim-lualine/lualine.nvim 状态栏
+nvim-treesitter/nvim-treesitter 语法树高亮
+nvim-treesitter/playground treesitter 的可视化
+vim-treesitter/nvim-treesitter-textobjects nvim-treesitter/nvim-treesitter-refactor windwp/nvim-ts-autotag JoosepAlviste/nvim-ts-context-commentstring lukas-reineke/indent-blankline.nvim uga-rosa/ccc.nvim nvim-tree/nvim-tree.lua vim-telescope/telescope.nvim nvim-telescope/telescope-fzf-native.nvim nvim-telescope/telescope-symbols.nvim nvim-telescope/telescope-project.nvim X nvim-telescope/telescope-file-browser.nvim nvim-telescope/telescope-media-files.nvim X dhruvmanila/telescope-bookmarks.nvim nvim-telescope/telescope-packer.nvim JoseConseco/telescope_sessions_picker.nvim X HUAHUAI23/telescope-session.nvim X AckslD/nvim-neoclip.lua X rmagatti/session-lens X rcarriga/nvim-notify X numToStr/Navigator.nvim X phaazon/hop.nvim karb94/neoscroll.nvim X folke/which-key.nvim stevearc/dressing.nvim X mrjones2014/legendary.nvim X b3nj5m1n/kommentary X numToStr/Comment.nvim tpope/vim-surround tpope/vim-repeat wellle/targets.vim numToStr/Buffers.nvim junegunn/vim-easy-align numToStr/FTerm.nvim mattn/emmet-vim AndrewRadev/tagalong.vim williamboman/mason.nvim williamboman/mason-lspconfig.nvim neovim/nvim-lspconfig hrsh7th/cmp-nvim-lsp jose-elias-alvarez/null-ls.nvim hrsh7th/nvim-cmp L3MON4D3/LuaSnip rafamadriz/friendly-snippets saadparwaiz1/cmp_luasnip hrsh7th/cmp-path hrsh7th/cmp-buffer hrsh7th/cmp-cmdline ray-x/cmp-treesitter windwp/nvim-autopair ndymass/vim-matchup j-hui/fidget.</description>
+    </item>
+    
+  </channel>
+</rss>
