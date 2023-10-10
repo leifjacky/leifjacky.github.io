@@ -1,7 +1,7 @@
 ---
 title: "Plugins"
 date: 2023-04-30T18:13:57+08:00
-draft: false
+draft: true
 categories: [Neovim]
 tags: []
 card: false

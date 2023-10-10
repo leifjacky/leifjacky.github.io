@@ -1,7 +1,7 @@
 ---
 title: "Linux(Mac)系统配置"
 date: 2023-04-13T20:45:58+08:00
-draft: false
+draft: true
 categories: [linux, mac]
 tags: []
 card: false
