@@ -44,6 +44,23 @@ systemctl start sshd
 
 ### 分区
 
+```bash
+cfdisk /dev/nvme0n1
+mkfs.fat -F32 /dev/nvme0n1p1
+mkswap /dev/nvme0n1p2
+mkfs.btrfs -L Arch12 /dev/nvme0n1p3
+mount -t btrfs -o compress=zstd /dev/nvme0n1p3 /mnt
+btrfs subvolume create /mnt/@
+btrfs subvolume create /mnt/@home
+umount /mnt
+mount -t btrfs -o subvol=/@,compress=zstd /dev/nvme0n1p3 /mnt
+mkdir /mnt/home
+mount -t btrfs -o subvol=/@home,compress=zstd /dev/nvme0n1p3 /mnt/home
+mkdir -p /mnt/boot
+mount /dev/nvme0n1p1 /mnt/boot
+swapon /dev/nvme0n1p2
+```
+
 第一次安装使用btrfs分区，但是nvme休眠后无法恢复状态。如果遇到SSD在休眠之后无法恢复，可以参考下文试试修改内核启动参数：
 
 [[Solved] System gets borked after suspending](https://bbs.archlinux.org/viewtopic.php?id=278820)
@@ -69,7 +86,7 @@ swapon /dev/nvme0n1p3
 ```bash
 pacstrap /mnt base base-devel linux linux-firmware
 pacstrap /mnt networkmanager vim sudo zsh zsh-completions
-genfstab -U /mnt >> /mnt/etc/fstab
+genfstab -U /mnt > /mnt/etc/fstab
 ```
 
 ![](img/photo_2023-10-11_01-02-37.png)
@@ -80,6 +97,9 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 ```bash
 arch-chroot /mnt
+```
+
+```bash
 ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 hwclock --systohc
 vim /etc/hostname
@@ -99,6 +119,9 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 ```bash
 exit
+```
+
+```bash
 umount -R /mnt
 reboot
 ```

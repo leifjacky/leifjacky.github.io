@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>linux on MentosSugus</title>
-    <link>https://leifjacky.github.io/categories/linux/</link>
+    <link>https://www.ycjycj.com/categories/linux/</link>
     <description>Recent content in linux on MentosSugus</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 08 Apr 2023 00:13:45 +0800</lastBuildDate><atom:link href="https://leifjacky.github.io/categories/linux/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 08 Apr 2023 00:13:45 +0800</lastBuildDate><atom:link href="https://www.ycjycj.com/categories/linux/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Some Linux Shell Scripts</title>
-      <link>https://leifjacky.github.io/posts/linux-shell-scripts/</link>
+      <link>https://www.ycjycj.com/posts/linux-shell-scripts/</link>
       <pubDate>Sat, 08 Apr 2023 00:13:45 +0800</pubDate>
       
-      <guid>https://leifjacky.github.io/posts/linux-shell-scripts/</guid>
+      <guid>https://www.ycjycj.com/posts/linux-shell-scripts/</guid>
       <description>linux 添加 swap 分区
 fallocate -l 8G /swapfile chmod 600 /swapfile mkswap /swapfile swapon /swapfile ubuntu16.04 安装 postgreSQL10
 echo &amp;#34;deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main&amp;#34; &amp;gt;&amp;gt; /etc/apt/sources.list.d/dgpg.list wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add - sudo apt-get update sudo apt install postgresql-10 参数调整：
@@ -22,10 +22,10 @@ wget http://download.redis.io/releases/redis-5.0.5.tar.gz tar xvf redis-5.0.5.ta
     
     <item>
       <title>在ubuntu16.04下通过squid进行http/https代理</title>
-      <link>https://leifjacky.github.io/posts/ubuntu-1604-squid/</link>
+      <link>https://www.ycjycj.com/posts/ubuntu-1604-squid/</link>
       <pubDate>Sat, 08 Apr 2023 00:03:30 +0800</pubDate>
       
-      <guid>https://leifjacky.github.io/posts/ubuntu-1604-squid/</guid>
+      <guid>https://www.ycjycj.com/posts/ubuntu-1604-squid/</guid>
       <description>1. 服务端设置 安装服务并编辑配置文件
 apt install squid vi /etc/squid/squid.conf 在 squid.conf 首行添加
 http_access allow all 找到http_port 3128，将 3128 改为自己想要的端口。

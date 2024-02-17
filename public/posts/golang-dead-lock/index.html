@@ -11,15 +11,15 @@
 package main import ( &#34;fmt&#34; &#34;sync&#34; ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(&#34;dosting start&#34;) // dosth fmt.Println(&#34;dosting end&#34;) } func lock() { fmt.Println(&#34;lock start&#34;) m.Lock() fmt.Println(&#34;lock end&#34;) } func unlock() { fmt.Println(&#34;unlock start&#34;) m.Unlock() fmt.Println(&#34;unlock end&#34;) } 运行结果：
 $ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。">
 <meta name="author" content="">
-<link rel="canonical" href="https://leifjacky.github.io/posts/golang-dead-lock/">
+<link rel="canonical" href="https://www.ycjycj.com/posts/golang-dead-lock/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.5cfc680b1eeaeef9efbced92d46c2a9e876b72ee14fba85846afc4cff9e6e6f8.css" integrity="sha256-XPxoCx7q7vnvvO2S1Gwqnodrcu4U&#43;6hYRq/Ez/nm5vg=" rel="preload stylesheet" as="style">
 <script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
     onload="hljs.initHighlightingOnLoad();"></script>
-<link rel="icon" href="https://leifjacky.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://leifjacky.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://leifjacky.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://leifjacky.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://leifjacky.github.io/safari-pinned-tab.svg">
+<link rel="icon" href="https://www.ycjycj.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://www.ycjycj.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://www.ycjycj.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://www.ycjycj.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://www.ycjycj.com/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
 <noscript>
@@ -63,7 +63,7 @@ $ go run main.go lock start lock end lock start fatal error: all goroutines are 
 package main import ( &#34;fmt&#34; &#34;sync&#34; ) var m sync.RWMutex func main() { lock() defer unlock() doSthing() } func doSthing() { lock() defer unlock() fmt.Println(&#34;dosting start&#34;) // dosth fmt.Println(&#34;dosting end&#34;) } func lock() { fmt.Println(&#34;lock start&#34;) m.Lock() fmt.Println(&#34;lock end&#34;) } func unlock() { fmt.Println(&#34;unlock start&#34;) m.Unlock() fmt.Println(&#34;unlock end&#34;) } 运行结果：
 $ go run main.go lock start lock end lock start fatal error: all goroutines are asleep - deadlock! 想当然认为在正常情形下出现死锁程序会自动退出并提示，但实际使用中有时会很难发现这种错误。先把以上代码的 main 函数稍做修改，模拟使用场景。" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://leifjacky.github.io/posts/golang-dead-lock/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://www.ycjycj.com/posts/golang-dead-lock/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-04-08T00:16:03+08:00" />
 <meta property="article:modified_time" content="2023-04-08T00:16:03+08:00" />
 
@@ -83,13 +83,13 @@ $ go run main.go lock start lock end lock start fatal error: all goroutines are 
       "@type": "ListItem",
       "position":  1 ,
       "name": "Posts",
-      "item": "https://leifjacky.github.io/posts/"
+      "item": "https://www.ycjycj.com/posts/"
     }, 
     {
       "@type": "ListItem",
       "position":  2 ,
       "name": "一种golang死锁情形",
-      "item": "https://leifjacky.github.io/posts/golang-dead-lock/"
+      "item": "https://www.ycjycj.com/posts/golang-dead-lock/"
     }
   ]
 }
@@ -111,14 +111,14 @@ $ go run main.go lock start lock end lock start fatal error: all goroutines are 
   "dateModified": "2023-04-08T00:16:03+08:00",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://leifjacky.github.io/posts/golang-dead-lock/"
+    "@id": "https://www.ycjycj.com/posts/golang-dead-lock/"
   },
   "publisher": {
     "@type": "Organization",
     "name": "MentosSugus",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://leifjacky.github.io/favicon.ico"
+      "url": "https://www.ycjycj.com/favicon.ico"
     }
   }
 }
@@ -140,7 +140,7 @@ $ go run main.go lock start lock end lock start fatal error: all goroutines are 
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://leifjacky.github.io/" accesskey="h" title="MentosSugus (Alt + H)">MentosSugus</a>
+            <a href="https://www.ycjycj.com/" accesskey="h" title="MentosSugus (Alt + H)">MentosSugus</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -176,7 +176,7 @@ $ go run main.go lock start lock end lock start fatal error: all goroutines are 
     <h1 class="post-title">
       一种golang死锁情形
     </h1>
-    <div class="post-meta"><span title='2023-04-08 00:16:03 +0800 CST'>April 8, 2023</span>
+    <div class="post-meta">&lt;span title=&#39;2023-04-08 00:16:03 &#43;0800 CST&#39;&gt;April 8, 2023&lt;/span&gt;
 
 </div>
   </header> 
@@ -315,7 +315,7 @@ $ go run main.go lock start lock end lock start fatal error: all goroutines are 
     </main>
     
 <footer class="footer">
-    <span>&copy; 2023 <a href="https://leifjacky.github.io/">MentosSugus</a></span>
+    <span>&copy; 2024 <a href="https://www.ycjycj.com/">MentosSugus</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &

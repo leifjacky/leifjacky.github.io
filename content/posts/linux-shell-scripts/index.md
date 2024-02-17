@@ -84,3 +84,24 @@ export JRE_HOME=${JAVA_HOME}/jre
 export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib
 export PATH=${JAVA_HOME}/bin:$PATH
 ```
+
+### i3lock
+
+```bash
+#!/usr/bin/env bash
+
+i3lock -n -i ~/Pictures/wall/857860.jpg -F \
+    --inside-color=373445ff --ring-color=ffffffff --line-uses-inside \
+    --keyhl-color=d23c3dff --bshl-color=d23c3dff --separator-color=00000000 \
+    --insidever-color=fecf4dff --insidewrong-color=d23c3dff \
+    --ringver-color=ffffffff --ringwrong-color=ffffffff --ind-pos="x+86:y+1003" \
+    --radius=15 --verif-text="" --wrong-text=""
+```
+
+### xflux
+
+```bash
+#!/bin/bash
+
+xflux -l 22.542883 -g 114.062996 -k 3000
+```

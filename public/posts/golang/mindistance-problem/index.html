@@ -13,15 +13,15 @@
 思路 本题与最长公共子序列有相似性。插入和删除其实是逆操作，操作与 ret[i-1][j]与 ret[i][j-1]有关，替换则是与 ret[i-1][j-1]有关。
 代码 package main import &#34;fmt&#34; const ( maxDistance = 0x3fffffff ) type Row []int func MinDistance(str1, str2 string) int { r1, r2 := []rune(str1), []rune(str2) return minDistance(r1, r2) } func minDistance(r1, r2 []rune) int { l1, l2 := len(r1), len(r2) a := genArray(l1, l2) for i := 1; i &lt;= l1; i&#43;&#43; { for j := 1; j &lt;= l2; j&#43;&#43; { if r1[i-1] == r2[j-1] {	// 无需进行操作 a[i][j] = a[i-1][j-1] } else { a[i][j] = min(a[i-1][j-1], min(a[i-1][j], a[i][j-1])) &#43; 1 // 从三种操作中选择最优 } } } return a[l1][l2] } func genArray(l1, l2 int) []Row { a := make([]Row, l1&#43;1) for i := 0; i &lt;= l1; i&#43;&#43; { a[i] = make(Row, l2&#43;1) for j := 0; j &lt;= l2; j&#43;&#43; { a[i][j] = maxDistance if i == 0 || j == 0 { a[i][j] = max(i, j) } } } return a } func max(a, b int) int { if a &gt; b { return a } return b } func min(a, b int) int { if a &lt; b { return a } return b } func main() { a := &#34;spiderman&#34; b := &#34;superman&#34; fmt.">
 <meta name="author" content="">
-<link rel="canonical" href="https://leifjacky.github.io/posts/golang/mindistance-problem/">
+<link rel="canonical" href="https://www.ycjycj.com/posts/golang/mindistance-problem/">
 <link crossorigin="anonymous" href="/assets/css/stylesheet.5cfc680b1eeaeef9efbced92d46c2a9e876b72ee14fba85846afc4cff9e6e6f8.css" integrity="sha256-XPxoCx7q7vnvvO2S1Gwqnodrcu4U&#43;6hYRq/Ez/nm5vg=" rel="preload stylesheet" as="style">
 <script defer crossorigin="anonymous" src="/assets/js/highlight.f413e19d0714851f6474e7ee9632408e58ac146fbdbe62747134bea2fa3415e0.js" integrity="sha256-9BPhnQcUhR9kdOfuljJAjlisFG&#43;9vmJ0cTS&#43;ovo0FeA="
     onload="hljs.initHighlightingOnLoad();"></script>
-<link rel="icon" href="https://leifjacky.github.io/favicon.ico">
-<link rel="icon" type="image/png" sizes="16x16" href="https://leifjacky.github.io/favicon-16x16.png">
-<link rel="icon" type="image/png" sizes="32x32" href="https://leifjacky.github.io/favicon-32x32.png">
-<link rel="apple-touch-icon" href="https://leifjacky.github.io/apple-touch-icon.png">
-<link rel="mask-icon" href="https://leifjacky.github.io/safari-pinned-tab.svg">
+<link rel="icon" href="https://www.ycjycj.com/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://www.ycjycj.com/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://www.ycjycj.com/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://www.ycjycj.com/apple-touch-icon.png">
+<link rel="mask-icon" href="https://www.ycjycj.com/safari-pinned-tab.svg">
 <meta name="theme-color" content="#2e2e33">
 <meta name="msapplication-TileColor" content="#2e2e33">
 <noscript>
@@ -67,7 +67,7 @@
 思路 本题与最长公共子序列有相似性。插入和删除其实是逆操作，操作与 ret[i-1][j]与 ret[i][j-1]有关，替换则是与 ret[i-1][j-1]有关。
 代码 package main import &#34;fmt&#34; const ( maxDistance = 0x3fffffff ) type Row []int func MinDistance(str1, str2 string) int { r1, r2 := []rune(str1), []rune(str2) return minDistance(r1, r2) } func minDistance(r1, r2 []rune) int { l1, l2 := len(r1), len(r2) a := genArray(l1, l2) for i := 1; i &lt;= l1; i&#43;&#43; { for j := 1; j &lt;= l2; j&#43;&#43; { if r1[i-1] == r2[j-1] {	// 无需进行操作 a[i][j] = a[i-1][j-1] } else { a[i][j] = min(a[i-1][j-1], min(a[i-1][j], a[i][j-1])) &#43; 1 // 从三种操作中选择最优 } } } return a[l1][l2] } func genArray(l1, l2 int) []Row { a := make([]Row, l1&#43;1) for i := 0; i &lt;= l1; i&#43;&#43; { a[i] = make(Row, l2&#43;1) for j := 0; j &lt;= l2; j&#43;&#43; { a[i][j] = maxDistance if i == 0 || j == 0 { a[i][j] = max(i, j) } } } return a } func max(a, b int) int { if a &gt; b { return a } return b } func min(a, b int) int { if a &lt; b { return a } return b } func main() { a := &#34;spiderman&#34; b := &#34;superman&#34; fmt." />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://leifjacky.github.io/posts/golang/mindistance-problem/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://www.ycjycj.com/posts/golang/mindistance-problem/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-04-08T00:12:00+08:00" />
 <meta property="article:modified_time" content="2023-04-08T00:12:00+08:00" />
 
@@ -89,13 +89,13 @@
       "@type": "ListItem",
       "position":  1 ,
       "name": "Posts",
-      "item": "https://leifjacky.github.io/posts/"
+      "item": "https://www.ycjycj.com/posts/"
     }, 
     {
       "@type": "ListItem",
       "position":  2 ,
       "name": "最短编辑距离 Golang",
-      "item": "https://leifjacky.github.io/posts/golang/mindistance-problem/"
+      "item": "https://www.ycjycj.com/posts/golang/mindistance-problem/"
     }
   ]
 }
@@ -117,14 +117,14 @@
   "dateModified": "2023-04-08T00:12:00+08:00",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://leifjacky.github.io/posts/golang/mindistance-problem/"
+    "@id": "https://www.ycjycj.com/posts/golang/mindistance-problem/"
   },
   "publisher": {
     "@type": "Organization",
     "name": "MentosSugus",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://leifjacky.github.io/favicon.ico"
+      "url": "https://www.ycjycj.com/favicon.ico"
     }
   }
 }
@@ -146,7 +146,7 @@
 <header class="header">
     <nav class="nav">
         <div class="logo">
-            <a href="https://leifjacky.github.io/" accesskey="h" title="MentosSugus (Alt + H)">MentosSugus</a>
+            <a href="https://www.ycjycj.com/" accesskey="h" title="MentosSugus (Alt + H)">MentosSugus</a>
             <div class="logo-switches">
                 <button id="theme-toggle" accesskey="t" title="(Alt + T)">
                     <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
@@ -182,7 +182,7 @@
     <h1 class="post-title">
       最短编辑距离 Golang
     </h1>
-    <div class="post-meta"><span title='2023-04-08 00:12:00 +0800 CST'>April 8, 2023</span>
+    <div class="post-meta">&lt;span title=&#39;2023-04-08 00:12:00 &#43;0800 CST&#39;&gt;April 8, 2023&lt;/span&gt;
 
 </div>
   </header> 
@@ -276,7 +276,7 @@
     </main>
     
 <footer class="footer">
-    <span>&copy; 2023 <a href="https://leifjacky.github.io/">MentosSugus</a></span>
+    <span>&copy; 2024 <a href="https://www.ycjycj.com/">MentosSugus</a></span>
     <span>
         Powered by
         <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
